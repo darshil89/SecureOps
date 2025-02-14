@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "../../../globals.css";
-import Provider from "../../../../utils/Provider"
+import "../../../app/globals.css";
+import Provider from "../../../utils/Provider"
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/libs/auth";
 import { redirect } from "next/navigation";
@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Agency Dashboard",
+  title: "Guard Dashboard",
   description: "Smart security operations management",
 };
 
@@ -34,20 +34,27 @@ export default async function RootLayout({
   }
   const smallCase = session.user.role.toLowerCase();
 
-  if (session && session.user.role !== "AGENCY") {
+  if (session && session.user.role !== "GUARD") {
 
     redirect(`${smallCase}/dashboard`);
   }
   const data = {
     link: [
       {
-        href: `dashboard`,
+        href: `${smallCase}/dashboard`,
       },
+      {
+        href: `${smallCase}/register`,
+
+      }
     ],
     value: [
       {
-        value: "Agency's Dashboard",
-      },
+        value: "User's Dashboard",
+
+      }, {
+        value: "Register",
+      }
     ],
   }
   return (

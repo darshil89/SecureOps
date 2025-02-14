@@ -14,21 +14,19 @@ export const authOptions: AuthOptions = {
         console.log("profile", profile);
         if (profile.email.startsWith("darshil.xic.11") === true) {
           console.log("your user email = ", profile.email);
-          profile.role = Role.USER
-        }
-        else if (profile.email.endsWith("@gmail.com") === true) {
+          profile.role = Role.USER;
+        } else if (profile.email.endsWith("@gmail.com") === true) {
           console.log("your guard email = ", profile.email);
-          profile.role = Role.GUARD
-        }
-        else if (profile.email.endsWith("@dsce.edu.in") === true) {
+          profile.role = Role.GUARD;
+        } else if (profile.email.endsWith("@dsce.edu.in") === true) {
           console.log("your agency email = ", profile.email);
-          profile.role = Role.AGENCY
+          profile.role = Role.AGENCY;
         }
         // yahoo.com
         else {
-            console.log("your police email = ", profile.email);
-            profile.role = Role.POLICE
-          }
+          console.log("your police email = ", profile.email);
+          profile.role = Role.POLICE;
+        }
         return {
           id: profile.sub,
           name: profile.name,
@@ -36,6 +34,7 @@ export const authOptions: AuthOptions = {
           image: profile.picture,
           emailVerified: profile.email_verified,
           role: profile.role,
+          verified: profile.verified,
         };
       },
     }),
@@ -51,6 +50,7 @@ export const authOptions: AuthOptions = {
         token.id = user.id;
         token.emailVerified = user.emailVerified;
         token.role = user.role;
+        token.verified = user.verified;
       }
       return token;
     },
@@ -58,6 +58,7 @@ export const authOptions: AuthOptions = {
       session.user.role = token.role;
       session.user.id = token.id;
       session.user.emailVerified = token.emailVerified;
+      session.user.verified = token.verified;
       return session;
     },
   },

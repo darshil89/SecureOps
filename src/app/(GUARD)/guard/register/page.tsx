@@ -1,47 +1,72 @@
-"use client";
-import React, { useState } from 'react';
+"use client"
+import { registerGuard } from '@/helpers/backendConnect';
+import { Registration } from '@/types/register';
+import { Gender } from '@prisma/client';
+import { useSession } from 'next-auth/react';
+import React, { useState } from 'react'
+import { useDropzone } from "react-dropzone";
 
-enum Gender {
-    MALE = 'MALE',
-    FEMALE = 'FEMALE',
-    OTHER = 'OTHER'
-}
 
-const RegistrationForm: React.FC = () => {
-    const [formData, setFormData] = useState({
-        name: 'John Doe',
-        email: 'john.doe@example.com',
+const Register = () => {
+    const [formData, setFormData] = useState<Registration>({
         age: '',
-        gender: '',
+        gender: Gender.MALE,
         phone: '',
         address: '',
         adhar: ''
+    });
+    const { data, status } = useSession();
+
+    const [file, setFile] = useState<File[]>([]);
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+        accept: { 'image/*': [] },
+        multiple: true,
+        onDrop: (acceptedFiles) => {
+            setFile([...file, ...acceptedFiles]);
+        },
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Form submitted:', formData);
-    };
+        const dataToSend = { ...formData, adhar: '' };
+        for (const f of file) {
+            const fData = new FormData();
+            fData.append("file", f);
+            fData.append("upload_preset", "jx3jfkqs");
+            const uploadResponse = await fetch(
+                `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUD_NAME}/image/upload`,
+                {
+                    method: "POST",
+                    body: fData,
+                }
+            );
+            const uploadImageData = await uploadResponse.json();
+            dataToSend.adhar = uploadImageData.secure_url;
 
+        }
+
+        const response = await registerGuard({ data: dataToSend });
+
+        console.log(response);
+    };
     return (
-        <>
         <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 p-4">
             <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6">
                 <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-                    Registration Form
+                    Verification Form - verified {data?.user?.verified ? '✅' : '❌'}
                 </h2>
-                <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     {/* Pre-filled Fields */}
                     <div className="bg-gray-50 p-4 rounded-lg">
                         <label className="block text-sm font-semibold text-gray-600 mb-1">Name</label>
                         <input
                             type="text"
                             name="name"
-                            value={formData.name}
+                            value={data?.user?.name || ''}
                             disabled
                             className="w-full bg-gray-100 rounded-md px-3 py-2 text-gray-600"
                         />
@@ -52,7 +77,7 @@ const RegistrationForm: React.FC = () => {
                         <input
                             type="email"
                             name="email"
-                            value={formData.email}
+                            value={data?.user?.email || ''}
                             disabled
                             className="w-full bg-gray-100 rounded-md px-3 py-2 text-gray-600"
                         />
@@ -107,15 +132,29 @@ const RegistrationForm: React.FC = () => {
                         />
                     </div>
 
-                    <div className="p-4 rounded-lg md:col-span-2">
-                        <label className="block text-sm font-semibold text-gray-600 mb-1">Aadhar Number</label>
-                        <input
-                            type="text"
-                            name="adhar"
-                            value={formData.adhar}
-                            onChange={handleChange}
-                            className="w-full border-2 border-indigo-100 rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 outline-none transition-all"
-                        />
+                    <div className=" md:col-span-2 dropzone p-5 border-2 border-dashed border-gray-500 rounded-md text-center bg-gray-100 text-gray-400 cursor-pointer hover:bg-gray-200" {...getRootProps()}>
+                        <input {...getInputProps()} />
+                        {file.length > 0 ? (
+                            <div>
+                                {file.map((f, index) => (
+                                    <div key={f.name} className="file_container flex items-center">
+                                        <p style={{ marginRight: "10px" }}>{f.name}</p>
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation(); // Prevent file input from being clicked
+                                                const newFiles = file.filter((_, i) => i !== index);
+                                                setFile(newFiles); // Assume setFile is your state setter function
+                                            }}
+                                            style={{ color: "#000000" }} // Add this line
+                                        >
+                                            &#x2715;
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p>Drag and drop some files here, or click to select files</p>
+                        )}
                     </div>
 
                     <div className="md:col-span-2 p-4">
@@ -129,8 +168,7 @@ const RegistrationForm: React.FC = () => {
                 </form>
             </div>
         </div>
-        </>
-    );
-};
+    )
+}
 
-export default RegistrationForm;
+export default Register

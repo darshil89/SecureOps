@@ -1,15 +1,22 @@
 "use client";
-import { useState } from "react";
-import Link from "next/link";
-import { NavbarProps } from "@/types/Navbar";
-import Image from "next/image";
-import { signIn, signOut, useSession } from "next-auth/react";
-import { usePathname } from "next/navigation";
 
-const Navbar = ({ data }: { data: NavbarProps }) => {
+import { useState } from 'react'
 
-  const session = useSession();
+interface NavigationItem {
+  title: string;
+  path: string;
+}
 
+const Navbar: React.FC = () => {
+  const [state, setState] = useState<boolean>(false);
+
+  // Replace javascript:void(0) path with your path
+  const navigation: NavigationItem[] = [
+    { title: "Customers", path: "javascript:void(0)" },
+    { title: "Careers", path: "javascript:void(0)" },
+    { title: "Guides", path: "javascript:void(0)" },
+    { title: "Partners", path: "javascript:void(0)" }
+  ];
   const handleSignIn = async () => {
     await signIn("google");
   };
@@ -21,56 +28,77 @@ const Navbar = ({ data }: { data: NavbarProps }) => {
   };
 
   return (
-    <>
-    <header className="py-4 bg-black sm:py-6" x-data="{expanded: false}">
-        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            <div className="shrink-0">
-              <Link href="/" className="flex">
-                <Image
-                  width={100}
-                  height={100}
-                  src="/assets/logo.png"
-                  alt="logo"
-                />
-              </Link>
-            </div>
-
-            <nav className="hidden ml-10 mr-auto space-x-10 lg:ml-20 lg:space-x-12 md:flex md:items-center md:justify-start">
-              {session && (
-                <>
-                {data.link.map((item, index) => (
-                  <Link
-                    key={index}
-                    href={item.href}
-                    className={`text-base font-normal ${
-                      path === item.href
-                        ? "text-white"
-                        : "text-gray-400 hover:text-white"
-                    }`}
-                  >
-                    {data.value[index].value}
-                  </Link>
-                ))}
-                </>
+    <nav className="bg-white w-full border-b md:border-0 md:static">
+      <div className="items-center px-4 max-w-screen-xl mx-auto md:flex md:px-8">
+        <div className="flex items-center justify-between py-3 md:py-5 md:block">
+          <a href="javascript:void(0)">
+            <img
+              src="/sc.png"
+              width={120}
+              height={50}
+              alt="SecureOps"
+            />
+          </a>
+          <div className="md:hidden">
+            <button
+              className="text-gray-700 outline-none p-2 rounded-md focus:border-gray-400 focus:border"
+              onClick={() => setState(!state)}
+            >
+              {state ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 8h16M4 16h16"
+                  />
+                </svg>
               )}
-            </nav>
-            {session && (
-              <>
-                <div className="relative hidden md:items-center md:justify-center md:inline-flex group">
-                  <div className="absolute transition-all duration-200 rounded-full -inset-px bg-gradient-to-r from-cyan-500 to-purple-500 group-hover:shadow-lg group-hover:shadow-cyan-500/50"></div>
-                  <button
-                    onClick={handleSignOut}
-                    className="relative inline-flex items-center justify-center px-6 py-2 text-base font-normal text-white bg-black border border-transparent rounded-full"
-                  >
-                    Logout
-                  </button>
-                </div>
-              </>
-            )}
+            </button>
           </div>
         </div>
-      </header></>
+        <div
+          className={`flex-1 justify-self-center pb-3 mt-8 md:block md:pb-0 md:mt-0 ${
+            state ? 'block' : 'hidden'
+          }`}
+        >
+          <ul className="justify-center items-center space-y-8 md:flex md:space-x-6 md:space-y-0">
+            {navigation.map((item, idx) => (
+              <li key={idx} className="text-gray-600 hover:text-indigo-600">
+                <a href={item.path}>{item.title}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="hidden md:inline-block">
+          <a
+            href="javascript:void(0)"
+            className="py-3 px-4 text-white bg-indigo-600 hover:bg-indigo-700 rounded-md shadow"
+          >
+            Get Started
+          </a>
+        </div>
+      </div>
+    </nav>
   );
 };
 
