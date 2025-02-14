@@ -7,6 +7,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import { useSession } from "next-auth/react";
 
 const socket = io("ws://localhost:5000", {
   transports: ["websocket"],
@@ -29,12 +30,15 @@ const MapAutoCenter = ({ location }: { location: { lat: number | null; lng: numb
     if (location.lat !== null && location.lng !== null) {
       map.setView([location.lat, location.lng], map.getZoom(), { animate: true });
     }
-  }, [location]);
+  }, [location, map]);
 
   return null;
 };
 
 export default function LiveLocation() {
+  const { data, status } = useSession(); // Get user session
+  const userId = data?.user?.id; // Extract user ID
+
   const [location, setLocation] = useState<{ lat: number | null; lng: number | null }>({
     lat: null,
     lng: null,
@@ -43,16 +47,16 @@ export default function LiveLocation() {
   const [users, setUsers] = useState<{ [key: string]: { lat: number; lng: number } }>({});
 
   useEffect(() => {
+    if (!userId) return; // Do nothing if user is not logged in
+
     if ("geolocation" in navigator) {
       const watchId = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          console.log("Using GPS:", position.coords.latitude, position.coords.longitude);
-
           setLocation({ lat: latitude, lng: longitude });
 
-          // Emit the updated location to the WebSocket server
-          socket.emit("updateLocation", { lat: latitude, lng: longitude });
+          // Send userId with location update
+          socket.emit("updateLocation", { userId, lat: latitude, lng: longitude });
         },
         (error) => console.error("Error getting location:", error),
         { enableHighAccuracy: true, maximumAge: 0 }
@@ -62,11 +66,10 @@ export default function LiveLocation() {
     } else {
       console.log("Geolocation is not supported by this browser.");
     }
-  }, []);
+  }, [userId]); // Ensure effect runs only when userId is available
 
   useEffect(() => {
     const handleBroadcast = (data: { [key: string]: { lat: number; lng: number } }) => {
-      console.log("Broadcasted locations:", data);
       setUsers(data);
     };
 
@@ -100,7 +103,7 @@ export default function LiveLocation() {
         {/* Display other users' locations */}
         {Object.entries(users).map(([id, user]) => (
           <Marker key={id} position={[user.lat, user.lng]} icon={customIcon}>
-            <Popup>User {id}</Popup>
+            <Popup>Guard: {data?.user.name}</Popup>
           </Marker>
         ))}
       </MapContainer>

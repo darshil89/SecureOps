@@ -15,22 +15,25 @@ const io = new Server(server, {
 const port = 5000;
 app.use(cors());
 
-let users: { [key: string]: { lat: number; lng: number } } = {};
+let users: { [userId: string]: { lat: number; lng: number } } = {};
 
-io.on("connection", (socket) => {
-  console.log("New client connected:", socket.id);
-
-  socket.on("updateLocation", (data) => {
-    console.log("Received location update:", data);
-    users[socket.id] = data;
-    io.emit("broadcastLocation", users);
+io.on("connection", (socket) => {  
+    socket.on("updateLocation", ({ userId, lat, lng }) => {
+      if (!userId) return; // Ignore if no userId provided
+  
+      console.log(`User ${userId} connected.`);
+      users[userId] = { lat, lng }; // Update user location
+      io.emit("broadcastLocation", users); // Broadcast updated locations
+    });
+  
+    socket.on("disconnect", () => {
+      // Optional: Remove user data on disconnect
+      const disconnectedUser = Object.keys(users).find((id) => users[id].lat === null);
+      if (disconnectedUser) delete users[disconnectedUser];
+  
+      io.emit("broadcastLocation", users); // Update clients
+    });
   });
-
-  socket.on("disconnect", () => {
-    delete users[socket.id];
-    io.emit("broadcastLocation", users);
-  });
-});
 
 app.get("/", (req, res) => {
   res.send("Server is running");
