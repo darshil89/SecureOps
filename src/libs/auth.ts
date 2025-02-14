@@ -36,6 +36,7 @@ export const authOptions: AuthOptions = {
           image: profile.picture,
           emailVerified: profile.email_verified,
           role: profile.role,
+          verified: profile.verified,
         };
       },
     }),
@@ -51,6 +52,7 @@ export const authOptions: AuthOptions = {
         token.id = user.id;
         token.emailVerified = user.emailVerified;
         token.role = user.role;
+        token.verified = user.verified;
       }
       return token;
     },
@@ -58,6 +60,7 @@ export const authOptions: AuthOptions = {
       session.user.role = token.role;
       session.user.id = token.id;
       session.user.emailVerified = token.emailVerified;
+      session.user.verified = token.verified;
       return session;
     },
   },

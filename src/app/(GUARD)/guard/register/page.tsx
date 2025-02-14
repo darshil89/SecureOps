@@ -1,13 +1,14 @@
 "use client"
+import { Registration } from '@/types/register';
 import { Gender } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import React, { useState } from 'react'
 
 
 const Register = () => {
-    const [formData, setFormData] = useState({
-        age: '',
-        gender: '',
+    const [formData, setFormData] = useState<Registration>({
+        age: 0,
+        gender: Gender.MALE,
         phone: '',
         address: '',
         adhar: ''
@@ -26,7 +27,7 @@ const Register = () => {
         <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 p-4">
             <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6">
                 <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-                    Verification Form
+                    Verification Form - verified {data?.user?.verified ? '✅' : '❌'}
                 </h2>
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     {/* Pre-filled Fields */}

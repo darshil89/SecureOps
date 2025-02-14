@@ -11,6 +11,7 @@ declare module "next-auth/jwt" {
     emailVerified: CustomType;
     accessToken: string!;
     role: string;
+    verified: boolean;
   }
 }
 
@@ -20,11 +21,13 @@ declare module "next-auth" {
       id: UserId;
       emailVerified: CustomType;
       role: string;
+      verified: boolean;
     };
   }
 
   interface User {
     emailVerified: CustomType;
     role: string;
+    verified: boolean;
   }
 }
