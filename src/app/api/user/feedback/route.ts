@@ -4,7 +4,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 export async function POST(req: NextRequest) {
   try {
-    const { feedback, mail, guard } = await req.json();
+    const { feedback, guard, email } = await req.json();
 
     // Find the guard (receiver of the rating) using email
     const guardUser = await prisma.user.findUnique({
@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
 
     // Find the reviewer (user giving the feedback) using email
     const reviewerUser = await prisma.user.findUnique({
-      where: { email: mail },
+      where: { email: email },
     });
 
     if (!reviewerUser) {

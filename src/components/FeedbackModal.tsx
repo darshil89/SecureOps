@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { X, Send } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { authOptions } from "@/libs/auth";
 
 interface FeedbackModalProps {
   guard: {
@@ -12,6 +14,7 @@ interface FeedbackModalProps {
 const FeedbackModal: React.FC<FeedbackModalProps> = ({ guard, onClose }) => {
   const [feedback, setFeedback] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { data: session } = useSession();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,6 +27,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ guard, onClose }) => {
         body: JSON.stringify({
           feedback,
           guard: guard.email,
+          email: session?.user?.email,
         }),
       });
 
