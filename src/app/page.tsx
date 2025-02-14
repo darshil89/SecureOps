@@ -1,5 +1,4 @@
 import Navbar from "@/components/Navbar";
-import RegistrationForm from "@/components/RegistrationForm";
 import GridDistortion from '../components/distortation';
 import Image from "next/image";
 import Footer from "@/components/Footer";
@@ -11,13 +10,11 @@ import PreHero from "@/components/PreHero";
 export default function Home() {
   return (
     <>
-
-<PreHero />
-<HeroSection />
-<Hero  />
-<ServicesSection />
-
-<Footer />
+      <PreHero />
+      <HeroSection />
+      <Hero />
+      <ServicesSection />
+      <Footer />
     </>
   );
 }
