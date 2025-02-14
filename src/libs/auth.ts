@@ -26,6 +26,8 @@ export const authOptions: AuthOptions = {
         } else {
           console.log("your agency email = ", profile.email);
           profile.role = Role.AGENCY;
+
+          // @dsce.edu.in
         }
         return {
           id: profile.sub,

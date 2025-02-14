@@ -10,13 +10,11 @@ import PreHero from "@/components/PreHero";
 export default function Home() {
   return (
     <>
-
-<PreHero />
-<HeroSection />
-<Hero  />
-<ServicesSection />
-
-<Footer />
+      <PreHero />
+      <HeroSection />
+      <Hero />
+      <ServicesSection />
+      <Footer />
     </>
   );
 }

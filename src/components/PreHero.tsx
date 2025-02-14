@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useEffect, FC } from "react";
 
 interface NavigationItem {
@@ -12,10 +13,8 @@ const PreHero: FC = () => {
 
     // Replace javascript:void(0) paths with your paths
     const navigation: NavigationItem[] = [
-        { title: "User", path: "javascript:void(0)" },
-        { title: "Guard", path: "javascript:void(0)" },
-        { title: "Police", path: "javascript:void(0)" },
-        { title: "Agency", path: "javascript:void(0)" }
+        { title: "About", path: "/about" },
+        { title: "Feature", path: "/feature" },
     ];
 
     useEffect(() => {
@@ -27,14 +26,14 @@ const PreHero: FC = () => {
 
     const Brand: FC = () => (
         <div className="flex items-center justify-between py-5 md:block">
-            <a href="javascript:void(0)">
+            <Link href="/">
                 <img
                     src="/so.png"
                     width={60}
                     height={40}
                     alt="Float UI logo"
                 />
-            </a>
+            </Link>
             <div className="md:hidden">
                 <button className="menu-btn text-gray-400 hover:text-gray-300"
                     onClick={() => setState(!state)}
@@ -70,9 +69,9 @@ const PreHero: FC = () => {
                                     navigation.map((item, idx) => {
                                         return (
                                             <li key={idx} className="text-gray-300 hover:text-gray-400">
-                                                <a href={item.path} className="block">
+                                                <Link href={item.path} className="block">
                                                     {item.title}
-                                                </a>
+                                                </Link>
                                             </li>
                                         )
                                     })
