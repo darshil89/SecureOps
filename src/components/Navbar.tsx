@@ -10,8 +10,6 @@ const Navbar = ({ data }: { data: NavbarProps }) => {
 
   const session = useSession();
 
-  console.log("navbar data ", data);
-
   const handleSignIn = async () => {
     await signIn("google");
   };
