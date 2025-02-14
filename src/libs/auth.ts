@@ -14,21 +14,19 @@ export const authOptions: AuthOptions = {
         console.log("profile", profile);
         if (profile.email.startsWith("darshil.xic.11") === true) {
           console.log("your user email = ", profile.email);
-          profile.role = Role.USER
-        }
-        else if (profile.email.endsWith("@gmail.com") === true) {
+          profile.role = Role.USER;
+        } else if (
+          profile.email.startsWith("policeofficer.secureops") === true
+        ) {
+          console.log("your police email = ", profile.email);
+          profile.role = Role.POLICE;
+        } else if (profile.email.endsWith("@gmail.com") === true) {
           console.log("your guard email = ", profile.email);
-          profile.role = Role.GUARD
-        }
-        else if (profile.email.endsWith("@dsce.edu.in") === true) {
+          profile.role = Role.GUARD;
+        } else {
           console.log("your agency email = ", profile.email);
-          profile.role = Role.AGENCY
+          profile.role = Role.AGENCY;
         }
-        // yahoo.com
-        else {
-            console.log("your police email = ", profile.email);
-            profile.role = Role.POLICE
-          }
         return {
           id: profile.sub,
           name: profile.name,
