@@ -9,7 +9,6 @@ export async function GET() {
         users: true,
       },
     });
-
     return NextResponse.json(agenciesWithUsers);
   } catch (error) {
     return NextResponse.json({

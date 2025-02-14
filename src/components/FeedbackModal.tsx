@@ -1,11 +1,33 @@
+import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 
-const FeedbackModal: React.FC<any> = ({ guard, onClose }) => {
+const FeedbackModal: React.FC<{ guard: any; onClose: () => void }> = ({
+  guard,
+  onClose,
+}) => {
+  const { data: session } = useSession(); // ✅ Fetch session correctly
   const [feedback, setFeedback] = useState<string>("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(`Feedback for ${guard.name}:`, feedback);
+    if (!session?.user?.email) {
+      alert("You must be logged in to submit feedback.");
+      return;
+    }
+
+    const request = await fetch("/api/user/feedback", {
+      headers: { "Content-Type": "application/json" },
+      method: "POST",
+      body: JSON.stringify({
+        feedback,
+        mail: session.user.email, // ✅ Correctly access user email
+        guard: guard.email,
+      }),
+    });
+
+    const resData = await request.json();
+    if (resData) console.log(resData);
+
     onClose(); // Close modal after submission
   };
 
