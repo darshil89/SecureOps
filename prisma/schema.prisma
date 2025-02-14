@@ -14,7 +14,9 @@ datasource db {
 }
 
 model User {
+
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  image         String?
   name          String?
   email         String?   @unique
   age           Int
@@ -26,12 +28,19 @@ model User {
   verified      Boolean   @default(false)
   role          Role
 
-  // security guard specific
+  // guard specific
   geoLocation Geofence?
+  prevExperience PreviousExperience[]
+  ratingsReceived Rating[] @relation(name: "RatingUser")   
+
+  // user specific 
+  ratingsGiven    Rating[] @relation(name: "ReviewerUser")
 
   // agency specific
   agencyId String? @db.ObjectId
   agency   Agency? @relation(fields: [agencyId], references: [id])
+
+  
 
   attendances Attendance[]
   accounts    Account[]
@@ -41,6 +50,25 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
+model PreviousExperience {
+    id String  @id @default(auto()) @map("_id") @db.ObjectId
+    workPlace String
+    experinceYears Int 
+    joiningData String
+    userId String @db.ObjectId
+    user User   @relation(fields: [userId], references: [id])
+}
+    
+model Rating {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  guardId   String  @db.ObjectId
+  guard     User    @relation(name : "RatingUser" ,  fields: [guardId], references: [id])
+  rating    Float   @default(0) 
+  reviewerId String @db.ObjectId
+  reviewer User @relation( name : "ReviewerUser" , fields: [reviewerId] , references: [id])
+  comment   String?
+  ratedAt   DateTime @default(now())
+}
 model Geofence {
   id             String    @id @default(auto()) @map("_id") @db.ObjectId
   name           String
