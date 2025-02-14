@@ -23,12 +23,18 @@ const customIcon = new L.Icon({
 });
 
 // Auto-center component
-const MapAutoCenter = ({ location }: { location: { lat: number | null; lng: number | null } }) => {
+const MapAutoCenter = ({
+  location,
+}: {
+  location: { lat: number | null; lng: number | null };
+}) => {
   const map = useMap();
 
   useEffect(() => {
     if (location.lat !== null && location.lng !== null) {
-      map.setView([location.lat, location.lng], map.getZoom(), { animate: true });
+      map.setView([location.lat, location.lng], map.getZoom(), {
+        animate: true,
+      });
     }
   }, [location, map]);
 
@@ -39,12 +45,17 @@ export default function LiveLocation() {
   const { data, status } = useSession();
   const userId = data?.user?.id;
 
-  const [location, setLocation] = useState<{ lat: number | null; lng: number | null }>({
+  const [location, setLocation] = useState<{
+    lat: number | null;
+    lng: number | null;
+  }>({
     lat: null,
     lng: null,
   });
 
-  const [users, setUsers] = useState<{ [key: string]: { lat: number; lng: number } }>({});
+  const [users, setUsers] = useState<{
+    [key: string]: { lat: number; lng: number };
+  }>({});
 
   useEffect(() => {
     if (!userId) return;
@@ -56,7 +67,11 @@ export default function LiveLocation() {
           setLocation({ lat: latitude, lng: longitude });
 
           // Send userId with location update
-          socket.emit("updateLocation", { userId, lat: latitude, lng: longitude });
+          socket.emit("updateLocation", {
+            userId,
+            lat: latitude,
+            lng: longitude,
+          });
         },
         (error) => console.error("Error getting location:", error),
         { enableHighAccuracy: true, maximumAge: 0 }
@@ -69,7 +84,9 @@ export default function LiveLocation() {
   }, [userId]);
 
   useEffect(() => {
-    const handleBroadcast = (data: { [key: string]: { lat: number; lng: number } }) => {
+    const handleBroadcast = (data: {
+      [key: string]: { lat: number; lng: number };
+    }) => {
       setUsers(data);
     };
 
@@ -82,9 +99,12 @@ export default function LiveLocation() {
 
   return (
     <div className="w-full">
-      
       <MapContainer
-        center={location.lat !== null && location.lng !== null ? [location.lat, location.lng] : [20, 78]}
+        center={
+          location.lat !== null && location.lng !== null
+            ? [location.lat, location.lng]
+            : [20, 78]
+        }
         zoom={15}
         style={{ height: "500px", width: "100%" }}
       >

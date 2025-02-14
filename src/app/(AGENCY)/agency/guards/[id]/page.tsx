@@ -1,102 +1,161 @@
 "use client";
-import GuardHero from "@/components/GuardHero";
-import { Star } from "lucide-react";
-
-import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import Maps from "@/components/Maps";
-function Page() {
-  const { id } = useParams(); // Correct way to get dynamic params in App Router
-
-  const [data, setData] = useState<any>({});
-  const fetchData = async () => {
-    const response = await fetch("/api/agency/guard", {
-      headers: {
-        "content-type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify({ id: id }),
-    });
-    const resData = await response.json();
-    console.log(resData);
-    setData(resData);
-  };
-
+import { Star, MapPin, Clock, Calendar, Shield, Award } from "lucide-react";
+import { StarRating } from "@/components/StarRating";
+import { useParams } from "next/navigation";
+function App() {
+  const [guard, setGuard] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const { id } = useParams();
   useEffect(() => {
-    fetchData();
+    const fetchGuardData = async () => {
+      try {
+        const response = await fetch("/api/agency/guard", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: id }), // Replace with actual ID
+        });
+        const data = await response.json();
+        setGuard(data);
+      } catch (error) {
+        console.error("Failed to fetch guard data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGuardData();
   }, []);
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+      </div>
+    );
+  }
+
+  if (!guard) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <p className="text-gray-500 text-lg">No guard data available</p>
+      </div>
+    );
+  }
+
   return (
-    <div>
-      <div className="flex flex-col items-center bg-gray-100 min-h-screen py-10">
-        <div className="bg-white p-6 rounded-lg shadow-lg w-3/4 flex">
-          <div className="w-1/3 flex flex-col items-center border-r border-gray-300 p-4">
-            <div className="w-32 h-32 bg-gray-200 rounded-full mb-4 flex items-center justify-center">
-              <Image
-                src={data.image || "/guard.png"}
-                alt="Guard"
-                width={100}
-                height={100}
-                className="w-32 h-32 rounded-full"
-              />
+    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header Section */}
+        <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-8">
+          <div className="relative h-48 bg-gradient-to-r from-blue-600 to-blue-800">
+            <div className="absolute -bottom-20 left-8">
+              <div className="relative">
+                <img
+                  src={
+                    guard.image ||
+                    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&fit=crop"
+                  }
+                  alt={guard.name}
+                  className="w-40 h-40 rounded-full border-4 border-white object-cover shadow-lg"
+                />
+                <div className="absolute bottom-4 right-4 bg-green-500 w-4 h-4 rounded-full border-2 border-white"></div>
+              </div>
             </div>
-            <p className="font-bold text-lg">{data.name}</p>
-            <p className="text-gray-600 font-semibold ">ID: {data.id}</p>
-            <p className="text-gray-600 font-semibold ">Shift: Night</p>
-            <p className="text-gray-600 font-semibold ">
-              Position: {data.role}
-            </p>
           </div>
-
-          <div className="w-2/3 p-6">
-            <div className="mb-4">
-              <label className="text-gray-700 font-semibold">Date:</label>
-              <p className="border p-2 rounded-md bg-gray-100">
-                {data.checkInDate}
-              </p>
+          <div className="pt-24 pb-6 px-8">
+            <div className="flex justify-between items-start">
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  {guard.name}
+                </h1>
+                <div className="flex items-center gap-4 mt-2 text-gray-600">
+                  <div className="flex items-center gap-1">
+                    <Shield className="w-4 h-4" />
+                    <span>{guard.role}</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Clock className="w-4 h-4" />
+                    <span>{guard.shift} Shift</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Award className="w-4 h-4" />
+                    <span>ID: {guard.id}</span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col items-end">
+                <StarRating rating={4.5} className="mb-2" />
+                <span className="text-sm text-gray-500">
+                  {guard.ratingsReceived.length} reviews
+                </span>
+              </div>
             </div>
+          </div>
+        </div>
 
-            <div className="mb-4">
-              <label className="text-gray-700 font-semibold">Checked In:</label>
-              <p className="border p-2 rounded-md bg-gray-100">
-                {data.checkInStatus}
-              </p>
-            </div>
-
-            <div className="mb-4">
-              <label className="text-gray-700 font-semibold">Rating:</label>
-              <div className="flex items-center space-x-1 mt-2">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`w-6 h-6 ${
-                      i < Math.floor(4.5) ? "text-yellow-500" : "text-gray-300"
-                    }`}
-                  />
-                ))}
+        {/* Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Activity Section */}
+          <div className="lg:col-span-2 space-y-8">
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
+              <div className="space-y-4">
+                <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+                  <Calendar className="w-5 h-5 text-blue-600" />
+                  <div>
+                    <p className="font-medium">Last Check-in</p>
+                    <p className="text-sm text-gray-600">
+                      {new Date(guard.updatedAt).toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+                  <MapPin className="w-5 h-5 text-blue-600" />
+                  <div>
+                    <p className="font-medium">Current Location</p>
+                    <p className="text-sm text-gray-600">
+                      Main Entrance, Building A
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="mb-4">
-              <label className="text-gray-700 font-semibold">Reviews:</label>
-              <div className="space-y-2 mt-2">
-                {data?.ratingsReceived?.map((review: any, index: number) => (
-                  <div
-                    key={index}
-                    className="border p-3 rounded-md bg-gray-100"
-                  >
-                    <p className="italic">"{review.comment}"</p>
-                    <div className="flex justify-between mt-2 text-gray-600 text-sm"></div>
+            {/* Reviews Section */}
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              <h2 className="text-xl font-semibold mb-4">Recent Reviews</h2>
+              <div className="space-y-4">
+                {guard.ratingsReceived.map((review: any, index: number) => (
+                  <div key={index} className="p-4 bg-gray-50 rounded-lg">
+                    <div className="flex items-start justify-between mb-2">
+                      <StarRating rating={review.rating} size={16} />
+                      <span className="text-sm text-gray-500">
+                        {new Date(review.createdAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <p className="text-gray-700">{review.comment}</p>
                   </div>
                 ))}
               </div>
             </div>
           </div>
-        </div>
-        <div className="w-screen px-40 mt-6 mx-10">
-          <div className="w-full h-64 border rounded-md shadow-md bg-gray-200 flex items-center justify-center">
-            <Maps />
+
+          {/* Map Section */}
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-xl shadow-sm p-6 sticky top-8">
+              <h2 className="text-xl font-semibold mb-4">Location</h2>
+              <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                {/* Map component would go here */}
+                <div className="w-full h-full flex items-center justify-center text-gray-500">
+                  Map View
+                </div>
+              </div>
+              <div className="mt-4">
+                <p className="font-medium">Current Patrol Area</p>
+                <p className="text-sm text-gray-600">Building A - Floor 1</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -104,4 +163,4 @@ function Page() {
   );
 }
 
-export default Page;
+export default App;
