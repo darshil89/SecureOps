@@ -7,8 +7,6 @@ const User = () => {
 
       <div>User
       </div>
-      
-      <Logout />
     </div>
   )
 }

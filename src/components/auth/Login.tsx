@@ -20,7 +20,7 @@ const Login: FC = () => {
     
         if (session) {
           if (session.user.role === Role.AGENCY) {
-            router.push("/admin/dashboard");
+            router.push("/agency/dashboard");
           }
           if (session.user.role === Role.GUARD) {
             router.push("/guard/dashboard");

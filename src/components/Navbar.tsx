@@ -30,7 +30,7 @@ const Navbar = ({ data }: { data: NavbarProps }) => {
                 <Image
                   width={100}
                   height={100}
-                  src="/assets/logo/onestop.png"
+                  src="/assets/logo.png"
                   alt="logo"
                 />
               </Link>
