@@ -40,7 +40,7 @@ const Login: FC = () => {
 
     return (<>
         {!session && (
-            <>
+            <div className="w-full h-screen flex items-center justify-center">
                 <div className="relative hidden md:items-center md:justify-center md:inline-flex group">
                     <div className="absolute transition-all duration-200 rounded-full -inset-px bg-gradient-to-r from-cyan-500 to-purple-500 group-hover:shadow-lg group-hover:shadow-cyan-500/50"></div>
                     <button
@@ -50,7 +50,7 @@ const Login: FC = () => {
                         Login
                     </button>
                 </div>
-            </>
+            </div>
         )}
         {session && (
             <>
@@ -66,3 +66,5 @@ const Login: FC = () => {
             </>
         )}</>)
 };
+
+export default Login;
