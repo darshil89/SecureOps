@@ -26,14 +26,14 @@ const PreHero: FC = () => {
 
     const Brand: FC = () => (
         <div className="flex items-center justify-between py-5 md:block">
-            <a href="javascript:void(0)">
+            <Link href="/">
                 <img
                     src="/so.png"
                     width={60}
                     height={40}
                     alt="Float UI logo"
                 />
-            </a>
+            </Link>
             <div className="md:hidden">
                 <button className="menu-btn text-gray-400 hover:text-gray-300"
                     onClick={() => setState(!state)}
