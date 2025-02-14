@@ -82,7 +82,7 @@ export default function LiveLocation() {
 
   return (
     <div className="w-full">
-      <h2 className="text-center text-lg font-semibold mb-4">Live Location Tracking</h2>
+      
       <MapContainer
         center={location.lat !== null && location.lng !== null ? [location.lat, location.lng] : [20, 78]}
         zoom={15}

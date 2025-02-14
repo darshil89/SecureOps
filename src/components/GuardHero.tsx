@@ -116,7 +116,8 @@ const GuardHero: React.FC = () => {
         </div>
       </div>
       <div className="w-screen px-40 mt-6 mx-10">
-        <div className="w-full h-64 border rounded-md shadow-md bg-gray-200 flex items-center justify-center">
+        <div className="w-full flex flex-col border rounded-md shadow-md bg-slate-50 items-center justify-center">
+          <h2 className="text-center text-lg font-semibold mb-4">Your Location</h2>
           <Maps />
         </div>
       </div>
