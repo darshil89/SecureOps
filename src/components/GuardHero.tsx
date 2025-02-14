@@ -3,6 +3,8 @@
 import React from 'react';
 import { Star } from 'lucide-react';
 import Maps from './Maps';
+import { useSession } from 'next-auth/react';
+import Image from 'next/image';
 
 interface GuardHeroProps {
   guardData: {
@@ -18,6 +20,8 @@ interface GuardHeroProps {
 }
 
 const GuardHero: React.FC = () => {
+
+  const {data , status} = useSession();
   // Dummy Data
   const guardData = {
     name:'Raju Chaurasia',
@@ -41,16 +45,18 @@ const GuardHero: React.FC = () => {
         {/* Left Side - Guard Details */}
         <div className="w-1/3 flex flex-col items-center border-r border-gray-300 p-4">
           <div className="w-32 h-32 bg-gray-200 rounded-full mb-4 flex items-center justify-center">
-            <img
-              src="https://5.imimg.com/data5/SELLER/Default/2024/3/403143967/ZD/QN/SL/48639671/security-guard-uniform-1000x1000.jpg"
+            <Image
+              src={data?.user.image || '/guard.png'}
               alt="Guard"
+              width={100}
+              height={100}
               className="w-32 h-32 rounded-full"
             />
           </div>
-          <p className="font-bold text-lg">{guardData.name}</p>
-          <p className="text-gray-600 font-semibold ">ID: {guardData.id}</p>
-          <p className="text-gray-600 font-semibold ">Shift: {guardData.shift}</p>
-          <p className="text-gray-600 font-semibold ">Position: {guardData.position}</p>
+          <p className="font-bold text-lg">{data?.user.name}</p>
+          <p className="text-gray-600 font-semibold ">ID: {data?.user.id}</p>
+          <p className="text-gray-600 font-semibold ">Shift: Night</p>
+          <p className="text-gray-600 font-semibold ">Position: {data?.user.role}</p>
         </div>
 
         {/* Right Side - Check-in, Ratings, and Reviews */}
