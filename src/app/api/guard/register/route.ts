@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../../../../prisma/index";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/libs/auth";
-import { Registration } from "@/types/register";
 import { Gender } from "@prisma/client";
 
 export async function POST(req: NextRequest, res: NextResponse) {
