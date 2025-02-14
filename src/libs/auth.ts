@@ -12,19 +12,20 @@ export const authOptions: AuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       profile(profile) {
         console.log("profile", profile);
-        if (profile.email.endsWith("@outlook.com") === true) {
-          console.log("your agency email = ", profile.email);
-          profile.role = Role.AGENCY
+        if (profile.email.startsWith("darshil.xic.11") === true) {
+          console.log("your user email = ", profile.email);
+          profile.role = Role.USER
         }
-        if (profile.email.endsWith("@gmail.com") === true) {
+        else if (profile.email.endsWith("@gmail.com") === true) {
           console.log("your guard email = ", profile.email);
           profile.role = Role.GUARD
         }
-        if (profile.email.endsWith("@dsce.edu.in") === true) {
-          console.log("your police email = ", profile.email);
-          profile.role = Role.POLICE
+        else if (profile.email.endsWith("@dsce.edu.in") === true) {
+          console.log("your agency email = ", profile.email);
+          profile.role = Role.AGENCY
         }
-        if (profile.email.endsWith("@dsce.edu.in") === true) {
+        // yahoo.com
+        else {
             console.log("your police email = ", profile.email);
             profile.role = Role.POLICE
           }

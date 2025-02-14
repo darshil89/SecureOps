@@ -19,11 +19,11 @@ model User {
   image         String?
   name          String?
   email         String?   @unique
-  age           Int
-  gender        Gender
-  phone         String
-  address       String
-  adhar         String
+  age           Int?
+  gender        Gender?
+  phone         String?
+  address       String?
+  adhar         String?
   emailVerified DateTime?
   verified      Boolean   @default(false)
   role          Role

@@ -1,15 +1,16 @@
 "use client";
-import Navbar from '@/components/Navbar';
 import React from 'react'
+import Logout from "../../../../components/auth/Logout"
 
-const Guard
-    = () => {
-        return (
+
+const Guard = () => {
+    return (
+        <div>
             <div>
-             <Navbar />
-
+                Guard
             </div>
-        )
-    }
+        </div>
+    )
+}
 
 export default Guard

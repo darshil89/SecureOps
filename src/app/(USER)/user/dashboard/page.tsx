@@ -1,8 +1,15 @@
 import React from 'react'
+import Logout from "../../../../components/auth/Logout"
 
 const User = () => {
   return (
-    <div>User</div>
+    <div>
+
+      <div>User
+      </div>
+      
+      <Logout />
+    </div>
   )
 }
 
