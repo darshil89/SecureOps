@@ -1,5 +1,4 @@
 "use client";
-import { fetchData } from "next-auth/client/_utils";
 import React, { useState } from "react";
 import { useEffect } from "react";
 

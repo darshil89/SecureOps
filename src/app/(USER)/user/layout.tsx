@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "../../../globals.css";
-import Provider from "../../../../utils/Provider"
+import "../../globals.css";
+import Provider from "../../../utils/Provider";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/libs/auth";
 import { redirect } from "next/navigation";
@@ -35,7 +35,6 @@ export default async function RootLayout({
   const smallCase = session.user.role.toLowerCase();
 
   if (session && session.user.role !== "USER") {
-
     redirect(`${smallCase}/dashboard`);
   }
   const data = {
@@ -49,7 +48,7 @@ export default async function RootLayout({
         value: "User's Dashboard",
       },
     ],
-  }
+  };
   return (
     <html lang="en">
       <Provider>
@@ -63,4 +62,3 @@ export default async function RootLayout({
     </html>
   );
 }
-
