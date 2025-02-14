@@ -30,6 +30,8 @@ const Register = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    console.log("age = ", data?.user.age);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const dataToSend = { ...formData, adhar: '' };
@@ -54,11 +56,21 @@ const Register = () => {
         console.log(response);
     };
     return (
-        <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 p-4">
-            <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6">
+        <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 p-4 relative">
+            {(data?.user.age != null && data?.user.verified == false) && (
+                <div className="absolute inset-0 bg-gray-900 bg-opacity-5 flex items-center justify-center z-10">
+                    <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+                        <h2 className="text-xl font-semibold text-gray-700">Your application is under review</h2>
+                        <p className="text-gray-500 mt-2">Please wait for verification to complete.</p>
+                    </div>
+                </div>
+            )}
+
+            <div className={`max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6 transition-all ${data?.user.age != null && data?.user.verified == false ? "blur-md pointer-events-none" : ""}`}>
                 <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
                     Verification Form - verified {data?.user?.verified ? '✅' : '❌'}
                 </h2>
+
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     {/* Pre-filled Fields */}
                     <div className="bg-gray-50 p-4 rounded-lg">
@@ -166,9 +178,11 @@ const Register = () => {
                         </button>
                     </div>
                 </form>
+
             </div>
         </div>
-    )
+    );
+
 }
 
 export default Register

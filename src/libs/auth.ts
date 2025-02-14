@@ -37,6 +37,11 @@ export const authOptions: AuthOptions = {
           emailVerified: profile.email_verified,
           role: profile.role,
           verified: profile.verified,
+          age: profile.age,
+          address: profile.address,
+          adhar: profile.adhar,
+          phone: profile.phone,
+          gender: profile.gender,
         };
       },
     }),
@@ -53,6 +58,12 @@ export const authOptions: AuthOptions = {
         token.emailVerified = user.emailVerified;
         token.role = user.role;
         token.verified = user.verified;
+        // optionals for other custom fields
+        token.age = user?.age;
+        token.address = user?.address;
+        token.adhar = user?.adhar;
+        token.phone = user?.phone;
+        token.gender = user?.gender;
       }
       return token;
     },
@@ -61,6 +72,12 @@ export const authOptions: AuthOptions = {
       session.user.id = token.id;
       session.user.emailVerified = token.emailVerified;
       session.user.verified = token.verified;
+      // optionals for other custom fields
+      session.user.age = token.age;
+      session.user.address = token.address;
+      session.user.adhar = token.adhar;
+      session.user.phone = token.phone;
+      session.user.gender = token.gender;
       return session;
     },
   },
