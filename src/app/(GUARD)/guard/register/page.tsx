@@ -1,22 +1,18 @@
-"use client";
-import React, { useState } from 'react';
+"use client"
+import { Gender } from '@prisma/client';
+import { useSession } from 'next-auth/react';
+import React, { useState } from 'react'
 
-enum Gender {
-    MALE = 'MALE',
-    FEMALE = 'FEMALE',
-    OTHER = 'OTHER'
-}
 
-const RegistrationForm: React.FC = () => {
+const Register = () => {
     const [formData, setFormData] = useState({
-        name: 'John Doe',
-        email: 'john.doe@example.com',
         age: '',
         gender: '',
         phone: '',
         address: '',
         adhar: ''
     });
+    const { data, status } = useSession();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -26,22 +22,20 @@ const RegistrationForm: React.FC = () => {
         e.preventDefault();
         console.log('Form submitted:', formData);
     };
-
     return (
-        <>
         <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 p-4">
             <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6">
                 <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-                    Registration Form
+                    Verification Form
                 </h2>
-                <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     {/* Pre-filled Fields */}
                     <div className="bg-gray-50 p-4 rounded-lg">
                         <label className="block text-sm font-semibold text-gray-600 mb-1">Name</label>
                         <input
                             type="text"
                             name="name"
-                            value={formData.name}
+                            value={data?.user?.name || ''}
                             disabled
                             className="w-full bg-gray-100 rounded-md px-3 py-2 text-gray-600"
                         />
@@ -52,7 +46,7 @@ const RegistrationForm: React.FC = () => {
                         <input
                             type="email"
                             name="email"
-                            value={formData.email}
+                            value={data?.user?.email || ''}  
                             disabled
                             className="w-full bg-gray-100 rounded-md px-3 py-2 text-gray-600"
                         />
@@ -129,8 +123,7 @@ const RegistrationForm: React.FC = () => {
                 </form>
             </div>
         </div>
-        </>
-    );
-};
+    )
+}
 
-export default RegistrationForm;
+export default Register

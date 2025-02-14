@@ -10,6 +10,8 @@ const Navbar = ({ data }: { data: NavbarProps }) => {
 
   const session = useSession();
 
+  console.log("navbar data ", data);
+
   const handleSignIn = async () => {
     await signIn("google");
   };
@@ -42,7 +44,7 @@ const Navbar = ({ data }: { data: NavbarProps }) => {
                 {data.link.map((item, index) => (
                   <Link
                     key={index}
-                    href={item.href}
+                    href={`/${item.href}`}
                     className={`text-base font-normal ${
                       path === item.href
                         ? "text-white"
