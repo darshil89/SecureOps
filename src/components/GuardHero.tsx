@@ -89,11 +89,10 @@ const GuardHero: React.FC = () => {
               {[...Array(5)].map((_, i) => (
                 <Star
                   key={i}
-                  className={`w-6 h-6 ${
-                    i < Math.floor(guardData.rating)
+                  className={`w-6 h-6 ${i < Math.floor(guardData.rating)
                       ? "text-yellow-500"
                       : "text-gray-300"
-                  }`}
+                    }`}
                 />
               ))}
             </div>
@@ -115,14 +114,13 @@ const GuardHero: React.FC = () => {
           </div>
         </div>
       </div>
+      {/* Map Section */}
       <div className="w-screen px-40 mt-6 mx-10">
         <div className="w-full flex flex-col border rounded-md shadow-md bg-slate-50 items-center justify-center">
           <h2 className="text-center text-lg font-semibold mb-4">Your Location</h2>
           <Maps />
         </div>
       </div>
-
-      {/* Map Section */}
     </div>
   );
 };

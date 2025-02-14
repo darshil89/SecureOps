@@ -36,8 +36,8 @@ const MapAutoCenter = ({ location }: { location: { lat: number | null; lng: numb
 };
 
 export default function LiveLocation() {
-  const { data, status } = useSession(); // Get user session
-  const userId = data?.user?.id; // Extract user ID
+  const { data, status } = useSession();
+  const userId = data?.user?.id;
 
   const [location, setLocation] = useState<{ lat: number | null; lng: number | null }>({
     lat: null,
@@ -47,7 +47,7 @@ export default function LiveLocation() {
   const [users, setUsers] = useState<{ [key: string]: { lat: number; lng: number } }>({});
 
   useEffect(() => {
-    if (!userId) return; // Do nothing if user is not logged in
+    if (!userId) return;
 
     if ("geolocation" in navigator) {
       const watchId = navigator.geolocation.watchPosition(
@@ -66,7 +66,7 @@ export default function LiveLocation() {
     } else {
       console.log("Geolocation is not supported by this browser.");
     }
-  }, [userId]); // Ensure effect runs only when userId is available
+  }, [userId]);
 
   useEffect(() => {
     const handleBroadcast = (data: { [key: string]: { lat: number; lng: number } }) => {
