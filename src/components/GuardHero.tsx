@@ -1,8 +1,8 @@
+'use client';
+
 import React from 'react';
-import { CheckCircle2, X } from 'lucide-react';
-import Image from 'next/image';
-import { SpotLight } from 'three';
-import SpotlightCard from './SpotlioghtCard';
+import { Star } from 'lucide-react';
+import Maps from './Maps';
 
 interface GuardHeroProps {
   guardData: {
@@ -12,112 +12,96 @@ interface GuardHeroProps {
     position: string;
     checkInDate: string;
     checkInStatus: string;
-    lastSevenDays: boolean[];
     rating: number;
-    reviews: Array<{
-      text: string;
-      author: string;
-      location: string;
-    }>;
+    reviews: Array<{ text: string; author: string; location: string }>;
   };
 }
 
-const GuardHero = () => {
-  // Dummy data
+const GuardHero: React.FC = () => {
+  // Dummy Data
   const guardData = {
-    name: "Manjunath bkl",
-    id: "911",
-    shift: "night",
-    position: "ganna",
-    checkInDate: "14 Feb",
-    checkInStatus: "yes",
-    lastSevenDays: [true, true, false, true, true, true, false],
+    name:'Raju Chaurasia',
+    id: '1234',
+    shift: 'Night',
+    position: 'Security Guard',
+    checkInDate: '14 Feb',
+    checkInStatus: 'Yes',
     rating: 4.5,
     reviews: [
-      {
-        text: "omg, this sucker is the goat!!!",
-        author: "koushik",
-        location: "flat 212"
-      }
-    ]
+      { text: 'Very responsible and punctual.', author: 'Alice', location: 'Flat 302' },
+      { text: 'Great service, very professional.', author: 'Bob', location: 'Block A' },
+    ],
   };
 
   return (
-    <div className="bg-white p-6 text-black min-h-screen">
-      <div className="max-w-7xl mx-auto grid grid-cols-3 gap-6">
-        {/* Left Section */}
-        <div className="col-span-2 space-y-6">
-          {/* Top Boxes */}
-          <div className="grid grid-cols-2 gap-6">
-            {/* Date and Check-in Box */}
-            <div className="border border-gray-700 rounded-lg p-4 ">
-              <div className="space-y-2 text-xl font-bold">
-                <p>Date: {guardData.checkInDate}</p>
-                <p>Checked in: {guardData.checkInStatus}</p>
-              </div>
-            </div>
-            
-            {/* Past 7 Days Box */}
-            <div className="border border-gray-700 rounded-lg p-4 ">
-              <p className="mb-2">past 7 days</p>
-              <div className="flex space-x-2">
-                {guardData.lastSevenDays.map((day, index) => (
-                  <span key={index}>
-                    {day ? (
-                      <CheckCircle2 className="w-5 h-5 text-green-500" />
-                    ) : (
-                      <X className="w-5 h-5 text-red-500" />
-                    )}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Map Section */}
-          <div className="border border-gray-700 rounded-lg p-4  h-64">
-            <p className="text-center mb-2">MAP</p>
-            <p className="text-center text-sm text-gray-500">(realtime ye boka kidhar hai)</p>
-          </div>
-
-          {/* Bottom Boxes */}
-          <div className="grid grid-cols-2 gap-6">
-            {/* Rating Box */}
-            <div className="border border-gray-700 rounded-lg p-4 ">
-              <p className="text-lg mb-1">RATING</p>
-              <p className="text-sm text-gray-500">(out of 5, not raat ka 6k)</p>
-            </div>
-
-            {/* Reviews Box */}
-            <div className="border border-gray-700 rounded-lg p-4 ">
-             
-              <div className="space-y-2">
-                <SpotlightCard />
-              </div>
-              <div className="flex justify-end mt-2">
-                <span className="text-gray-500">→</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Right Section - Guard Info */}
-        <div className="space-y-4">
-          <div className="border border-gray-700 rounded-full w-48 h-48 mx-auto overflow-hidden">
-            <img 
-              src="https://5.imimg.com/data5/SELLER/Default/2021/8/WE/EZ/TG/124413545/35181dc7-5f52-42ab-8d73-7d5caa9f7609-500x500.jpg" 
-              alt="guard" 
-              className="w-full h-full object-cover"
+   
+    <div className="flex flex-col items-center bg-gray-100 min-h-screen py-10">
+      {/* Profile Section */}
+      <div className="bg-white p-6 rounded-lg shadow-lg w-3/4 flex">
+        {/* Left Side - Guard Details */}
+        <div className="w-1/3 flex flex-col items-center border-r border-gray-300 p-4">
+          <div className="w-32 h-32 bg-gray-200 rounded-full mb-4 flex items-center justify-center">
+            <img
+              src="https://5.imimg.com/data5/SELLER/Default/2024/3/403143967/ZD/QN/SL/48639671/security-guard-uniform-1000x1000.jpg"
+              alt="Guard"
+              className="w-32 h-32 rounded-full"
             />
           </div>
-          <div className="items-center px-20 text-xl font-bold space-y-3">
-            <p>name: {guardData.name}</p>
-            <p>id: {guardData.id}</p>
-            <p>shift: {guardData.shift}</p>
-            <p>position: {guardData.position}</p>
+          <p className="font-bold text-lg">{guardData.name}</p>
+          <p className="text-gray-600 font-semibold ">ID: {guardData.id}</p>
+          <p className="text-gray-600 font-semibold ">Shift: {guardData.shift}</p>
+          <p className="text-gray-600 font-semibold ">Position: {guardData.position}</p>
+        </div>
+
+        {/* Right Side - Check-in, Ratings, and Reviews */}
+        <div className="w-2/3 p-6">
+          <div className="mb-4">
+            <label className="text-gray-700 font-semibold">Date:</label>
+            <p className="border p-2 rounded-md bg-gray-100">{guardData.checkInDate}</p>
+          </div>
+
+          <div className="mb-4">
+            <label className="text-gray-700 font-semibold">Checked In:</label>
+            <p className="border p-2 rounded-md bg-gray-100">{guardData.checkInStatus}</p>
+          </div>
+
+          <div className="mb-4">
+            <label className="text-gray-700 font-semibold">Rating:</label>
+            <div className="flex items-center space-x-1 mt-2">
+              {[...Array(5)].map((_, i) => (
+                <Star
+                  key={i}
+                  className={`w-6 h-6 ${i < Math.floor(guardData.rating) ? 'text-yellow-500' : 'text-gray-300'}`}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="mb-4">
+            <label className="text-gray-700 font-semibold">Reviews:</label>
+            <div className="space-y-2 mt-2">
+              {guardData.reviews.map((review, index) => (
+                <div key={index} className="border p-3 rounded-md bg-gray-100">
+                  <p className="italic">"{review.text}"</p>
+                  <div className="flex justify-between mt-2 text-gray-600 text-sm">
+                    <p>- {review.author}</p>
+                    <p>{review.location}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
+        
       </div>
+      <div className="w-screen px-40 mt-6 mx-10">
+        <div className="w-full h-64 border rounded-md shadow-md bg-gray-200 flex items-center justify-center">
+          <Maps />
+        </div>
+      </div>
+
+      {/* Map Section */}
+     
     </div>
   );
 };
