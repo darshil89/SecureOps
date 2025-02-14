@@ -2,12 +2,10 @@
 import Navbar from '@/components/Navbar';
 import React from 'react'
 
-const Guard
-    = () => {
+const Guard = () => {
         return (
             <div>
-             <Navbar />
-
+                <Navbar />
             </div>
         )
     }
