@@ -1,64 +1,76 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { NavbarProps } from "@/types/Navbar";
+import Image from "next/image";
+import { signIn, signOut, useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 
-const Navbar = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+const Navbar = ({ data }: { data: NavbarProps }) => {
 
-  const handleAuth = () => {
-    setIsLoggedIn(!isLoggedIn);
+  const session = useSession();
+
+  const handleSignIn = async () => {
+    await signIn("google");
+  };
+
+  const path = usePathname();
+
+  const handleSignOut = async () => {
+    await signOut();
   };
 
   return (
-    <nav className="bg-black p-4">
-      <div className=" flex justify-between items-center bg-black px-6 py-3 rounded-lg">
-        {/* Left Section: Logo */}
-        <div>
-          <Link href="/">
-            <img
-              src="https://t4.ftcdn.net/jpg/03/05/59/03/360_F_305590383_7JYA2Ww9bMbeYWoqIZiwu03iC115MM1K.jpg"
-              alt="Logo"
-              className="h-8 cursor-pointer"
-            />
-          </Link>
-        </div>
+    <>
+    <header className="py-4 bg-black sm:py-6" x-data="{expanded: false}">
+        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between">
+            <div className="shrink-0">
+              <Link href="/" className="flex">
+                <Image
+                  width={100}
+                  height={100}
+                  src="/assets/logo/onestop.png"
+                  alt="logo"
+                />
+              </Link>
+            </div>
 
-        {/* Middle Section: Navbar Links */}
-        <ul className="flex space-x-8 text-white font-medium">
-          <li>
-            <Link href="/agency">Agency</Link>
-          </li>
-          <li>
-            <Link href="/guard">Guard</Link>
-          </li>
-          <li>
-            <Link href="/police">Police</Link>
-          </li>
-          <li>
-            <Link href="/user">User</Link>
-          </li>
-        </ul>
-
-        {/* Right Section: Auth Buttons */}
-        <div>
-          {!isLoggedIn ? (
-            <button
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg"
-              onClick={handleAuth}
-            >
-              Sign In
-            </button>
-          ) : (
-            <button
-              className="bg-red-500 text-white px-4 py-2 rounded-lg"
-              onClick={handleAuth}
-            >
-              Logout
-            </button>
-          )}
+            <nav className="hidden ml-10 mr-auto space-x-10 lg:ml-20 lg:space-x-12 md:flex md:items-center md:justify-start">
+              {session && (
+                <>
+                {data.link.map((item, index) => (
+                  <Link
+                    key={index}
+                    href={item.href}
+                    className={`text-base font-normal ${
+                      path === item.href
+                        ? "text-white"
+                        : "text-gray-400 hover:text-white"
+                    }`}
+                  >
+                    {data.value[index].value}
+                  </Link>
+                ))}
+                </>
+              )}
+            </nav>
+            {session && (
+              <>
+                <div className="relative hidden md:items-center md:justify-center md:inline-flex group">
+                  <div className="absolute transition-all duration-200 rounded-full -inset-px bg-gradient-to-r from-cyan-500 to-purple-500 group-hover:shadow-lg group-hover:shadow-cyan-500/50"></div>
+                  <button
+                    onClick={handleSignOut}
+                    className="relative inline-flex items-center justify-center px-6 py-2 text-base font-normal text-white bg-black border border-transparent rounded-full"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
-      </div>
-    </nav>
+      </header></>
   );
 };
 
