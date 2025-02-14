@@ -19,7 +19,7 @@ model User {
   image         String?
   name          String?
   email         String?   @unique
-  age           Int?
+  age           String?
   gender        Gender?
   phone         String?
   address       String?
@@ -39,8 +39,6 @@ model User {
   // agency specific
   agencyId String? @db.ObjectId
   agency   Agency? @relation(fields: [agencyId], references: [id])
-
-  
 
   attendances Attendance[]
   accounts    Account[]

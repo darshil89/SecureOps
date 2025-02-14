@@ -17,6 +17,15 @@ const Navbar: React.FC = () => {
     { title: "Guides", path: "javascript:void(0)" },
     { title: "Partners", path: "javascript:void(0)" }
   ];
+  const handleSignIn = async () => {
+    await signIn("google");
+  };
+
+  const path = usePathname();
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
 
   return (
     <nav className="bg-white w-full border-b md:border-0 md:static">
