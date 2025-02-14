@@ -10,20 +10,20 @@ interface Stat {
 const StatsSection: React.FC = () => {
     const stats: Stat[] = [
         {
-            data: "35K",
-            title: "Customers"
+            data: "$350B+",
+            title: "Security Market by 2030"
         },
         {
-            data: "10K+",
-            title: "Downloads"
+            data: "70%",
+            title: "Surge in Smart Security Demand "
         },
         {
-            data: "40+",
-            title: "Countries"
+            data: "$10B",
+            title: "Lost Annually Due to Inefficiencies"
         },
         {
-            data: "30M+",
-            title: "Total revenue"
+            data: "25%",
+            title: "Guards Misallocated or Underutilized"
         },
     ];
 
@@ -40,10 +40,10 @@ const StatsSection: React.FC = () => {
                 <div className="mt-6 gap-12 sm:mt-0 md:flex lg:block">
                     <div className="max-w-2xl">
                         <h3 className="text-gray-800 text-3xl font-semibold sm:text-4xl">
-                            We do our best to make customers always happy
+                            Interesting Question: Why SecureOps?
                         </h3>
                         <p className="mt-3 max-w-xl">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi venenatis sollicitudin quam ut tincidunt.
+                        Real-time tracking, automated attendance, and smart deployment reduce inefficiencies.
                         </p>
                     </div>
                     <div className="flex-none mt-6 md:mt-0 lg:mt-6">
