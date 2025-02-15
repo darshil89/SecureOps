@@ -18,7 +18,7 @@ const About = () => {
       name: 'Darshil Mahraur',
       role: 'UI/UX Designer',
       image: 'https://res.cloudinary.com/dwwbx27ts/image/upload/v1739603399/Screenshot_2025-02-15_123923_ni33ch.png',
-      bio: 'Creative designer focused on crafting beautiful and intuitive user interfaces.',
+      bio: 'Specialized in building robust and scalable backend systems.',
       social: {
         github: '#',
         linkedin: '#',
@@ -29,7 +29,7 @@ const About = () => {
       name: 'Devansh Aryan',
       role: 'Backend Developer',
       image: 'https://res.cloudinary.com/dwwbx27ts/image/upload/v1739603583/WhatsApp_Image_2024-10-20_at_23.36.14_61819bac_zxvxv6.jpg',
-      bio: 'Specialized in building robust and scalable backend systems.',
+      bio: 'Creative designer focused on crafting beautiful and intuitive user interfaces.',
       social: {
         github: '#',
         linkedin: '#',
