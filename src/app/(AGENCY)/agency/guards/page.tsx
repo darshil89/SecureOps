@@ -1,8 +1,8 @@
 "use client";
+import Link from "next/link";
 import Maps from "@/components/Maps";
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 
 const page = () => {
   const [guardData, setGuardData] = useState<
@@ -94,6 +94,7 @@ const page = () => {
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600">
                     Address
                   </th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600"></th>
                 </tr>
               </thead>
               <tbody>
@@ -103,7 +104,10 @@ const page = () => {
                     className="border-t border-gray-100 hover:bg-gray-50 transition-colors"
                   >
                     <td className="px-6 py-4 text-sm text-gray-700 cursor-pointer">
-                      {guard.id}
+                      <Link href={`/agency/guards/info/${guard.id.toString()}`}>
+                        {" "}
+                        {guard.id}
+                      </Link>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-700 font-medium cursor-pointer">
                       {guard.name}
@@ -122,6 +126,13 @@ const page = () => {
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-700 cursor-pointer">
                       {guard.address}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-700 cursor-pointer">
+                      <button className="px-2 py-1 text-sm text-white rounded-md bg-blue-500">
+                        <Link href={`/agency/guards/attendance/${guard.id}`}>
+                          Attendance
+                        </Link>
+                      </button>
                     </td>
                   </tr>
                 ))}

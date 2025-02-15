@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Star, MapPin, Clock, Calendar, Shield, Award } from "lucide-react";
 import { StarRating } from "@/components/StarRating";
 import { useParams } from "next/navigation";
-import Maps from "@/components/Maps";
+import Maps from "@/components/IndidualMap";
 function App() {
   const [guard, setGuard] = useState<any>(null);
   const [loading, setLoading] = useState(true);

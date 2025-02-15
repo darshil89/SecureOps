@@ -1,45 +1,32 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import { format } from "date-fns";
 import {
+  ClipboardCheck,
+  Clock,
   UserCircle,
   Calendar,
-  Clock,
   CheckCircle2,
   AlertCircle,
-  ClipboardCheck,
 } from "lucide-react";
 
-interface GuardData {
-  id: string;
-  name: string;
-  shift: string;
-  checkInTime?: string;
-}
-
-interface AttendanceRecord {
-  date: string;
-  status: "Present" | "Absent";
-  shift: string;
-  checkInTime?: string;
-}
-
 const AttendancePage = () => {
-  const [guardData, setGuardData] = useState<GuardData>({
+  const { id } = useParams();
+  const [guardData, setGuardData] = useState({
     id: "G001",
     name: "Rajesh Kumar",
     shift: "Morning Shift (6 AM - 2 PM)",
   });
+
   const [isCheckedIn, setIsCheckedIn] = useState(false);
-  const [attendanceHistory, setAttendanceHistory] = useState<
-    AttendanceRecord[]
-  >([]);
+  const [data, setData] = useState<any>();
+  const [attendanceHistory, setAttendanceHistory] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentTime, setCurrentTime] = useState(
-    format(new Date(), "HH:mm:ss")
-  );
+  const [currentTime, setCurrentTime] = useState("");
 
   useEffect(() => {
+    setCurrentTime(format(new Date(), "HH:mm:ss"));
     const interval = setInterval(() => {
       setCurrentTime(format(new Date(), "HH:mm:ss"));
     }, 1000);
@@ -49,14 +36,17 @@ const AttendancePage = () => {
   useEffect(() => {
     const fetchAttendanceData = async () => {
       try {
-        const response = await fetch("/api/agency/attendance", {
-          headers: { "content-type": "application/json" },
-          method: "GET",
+        const response = await fetch(`/api/agency/attendance`, {
+          headers: { "Content-Type": "application/json" },
+          method: "POST",
+          body: JSON.stringify({ id }),
         });
         if (!response.ok) throw new Error("Failed to fetch attendance data");
-        const data = await response.json();
+        const resData = await response.json();
 
-        setAttendanceHistory(data);
+        setAttendanceHistory(resData.attendance);
+        console.log(resData);
+        setData(resData);
       } catch (error) {
         console.error("Error fetching attendance data:", error);
       } finally {
@@ -73,6 +63,7 @@ const AttendancePage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 p-4 md:p-8">
       <div className="max-w-4xl mx-auto space-y-6">
+        {/* Header */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-2">
@@ -81,9 +72,11 @@ const AttendancePage = () => {
             </h1>
             <div className="text-sm text-gray-500 flex items-center gap-2">
               <Clock className="w-4 h-4" />
-              <span suppressHydrationWarning>{currentTime}</span>
+              <span>{currentTime}</span>
             </div>
           </div>
+
+          {/* Guard Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
               <div className="flex items-start gap-4">
@@ -91,9 +84,9 @@ const AttendancePage = () => {
                 <div>
                   <p className="text-sm text-gray-600">Guard Name</p>
                   <p className="font-semibold text-lg text-gray-800">
-                    {guardData.name}
+                    {data?.user.name}
                   </p>
-                  <p className="text-sm text-gray-500 mt-1">{guardData.id}</p>
+                  <p className="text-sm text-gray-500 mt-1">{data?.user.id}</p>
                 </div>
               </div>
             </div>
@@ -102,45 +95,23 @@ const AttendancePage = () => {
                 <Calendar className="w-12 h-12 text-blue-600" />
                 <div>
                   <p className="text-sm text-gray-600">Current Shift</p>
-                  <p className="font-semibold text-gray-800">
-                    {guardData.shift}
-                  </p>
+                  <p className="font-semibold text-gray-800">Night</p>
                 </div>
               </div>
             </div>
           </div>
-          <div className="mt-6 flex justify-center">
-            <button
-              onClick={handleCheckIn}
-              disabled={isCheckedIn}
-              className={`
-                                flex items-center gap-2 px-8 py-3 rounded-lg text-white font-medium
-                                transform transition-all duration-200
-                                ${
-                                  isCheckedIn
-                                    ? "bg-green-500 cursor-not-allowed"
-                                    : "bg-blue-600 hover:bg-blue-700 hover:scale-105 active:scale-95"
-                                }
-                                shadow-lg hover:shadow-xl
-                            `}
-            >
-              {isCheckedIn ? (
-                <>
-                  <CheckCircle2 className="w-5 h-5" /> Checked In Successfully
-                </>
-              ) : (
-                <>
-                  <Clock className="w-5 h-5" /> Check In Now
-                </>
-              )}
-            </button>
-          </div>
+
+          {/* Check-In Button */}
+          <div className="mt-6 flex justify-center"></div>
         </div>
+
+        {/* Attendance History */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
             <Calendar className="w-6 h-6 text-blue-600" />
             This Week's Attendance History
           </h2>
+
           {isLoading ? (
             <div className="flex justify-center items-center h-40">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -170,12 +141,12 @@ const AttendancePage = () => {
                     className="hover:bg-gray-50 transition-colors"
                   >
                     <td className="px-6 py-4 text-sm text-gray-900">
-                      {record.checkIn}
+                      {record.date}
                     </td>
                     <td className="px-6 py-4">
                       <span
                         className={`${
-                          record.present === true
+                          record.status === "Present"
                             ? "bg-green-100 text-green-800"
                             : "bg-red-100 text-red-800"
                         } px-3 py-1 inline-flex items-center gap-1 text-xs font-medium rounded-full`}
@@ -185,12 +156,14 @@ const AttendancePage = () => {
                         ) : (
                           <AlertCircle className="w-3 h-3" />
                         )}
-                        {record.present}
+                        {record.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-500">night</td>
                     <td className="px-6 py-4 text-sm text-gray-500">
-                      {record.checkOut || "-"}
+                      {record.shift}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-500">
+                      {record.checkIn || "-"}
                     </td>
                   </tr>
                 ))}
