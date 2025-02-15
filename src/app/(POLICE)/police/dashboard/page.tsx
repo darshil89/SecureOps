@@ -2,6 +2,7 @@
 "use client";
 import React from 'react'
 import Logout from "../../../../components/auth/Logout"
+import Link from 'next/link'
 
 
 const Police = () => {
@@ -29,27 +30,9 @@ const Police = () => {
     }
     ]);
 
-  React.useEffect(() => {
-    const fetchIncidents = async () => {
-      try {
-        const response = await fetch('/api/incidents');
-        const data = await response.json();
-        if (data) {
-          setIncidents(data);
-        }
-      } catch (error) {
-        console.error('Error fetching incidents:', error);
-      }
-    };
-
-    fetchIncidents();
-  }, []);
-
   return (
     <div className="min-h-screen bg-gray-100">
-      
-      
-
+    
       {/* Main Content */}
       <div className="container mx-auto p-6">
       <div className="bg-white rounded-lg shadow">
@@ -71,7 +54,7 @@ const Police = () => {
         <tbody className="bg-white divide-y divide-gray-200">
           {incidents.map((incident, index) => (
           <tr key={index} className="hover:bg-gray-50 cursor-pointer">
-            <td className="px-6 py-4 whitespace-nowrap">{incident.from}</td>
+            <td className="px-6 py-4 whitespace-nowrap"><Link href="/police/dashboard/incident">{incident.from}</Link></td>
             <td className="px-6 py-4">{incident.subject}</td>
             
             <td className="px-6 py-4 text-sm text-gray-500">{incident.received}</td>
