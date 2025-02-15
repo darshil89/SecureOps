@@ -5,7 +5,7 @@ const About = () => {
   const team = [
     {
       name: 'Mohammad Ashab',
-      role: 'Full Stack Developer',
+      role: 'Backend Developer',
       image: 'https://res.cloudinary.com/dwwbx27ts/image/upload/v1739603518/WhatsApp_Image_2025-02-15_at_12.40.35_3153bcad_dyscla.jpg',
       bio: 'Passionate about creating seamless web experiences and solving complex problems.',
       social: {
@@ -16,7 +16,7 @@ const About = () => {
     },
     {
       name: 'Darshil Mahraur',
-      role: 'UI/UX Designer',
+      role: 'DevOps Engineer',
       image: 'https://res.cloudinary.com/dwwbx27ts/image/upload/v1739603399/Screenshot_2025-02-15_123923_ni33ch.png',
       bio: 'Specialized in building robust and scalable backend systems.',
       social: {
@@ -27,7 +27,7 @@ const About = () => {
     },
     {
       name: 'Devansh Aryan',
-      role: 'Backend Developer',
+      role: 'Frontend Developer',
       image: 'https://res.cloudinary.com/dwwbx27ts/image/upload/v1739603583/WhatsApp_Image_2024-10-20_at_23.36.14_61819bac_zxvxv6.jpg',
       bio: 'Creative designer focused on crafting beautiful and intuitive user interfaces.',
       social: {
@@ -38,7 +38,7 @@ const About = () => {
     },
     {
       name: 'Hamad Hussain',
-      role: 'DevOps Engineer',
+      role: 'Ai/ML Developer',
       image: 'https://res.cloudinary.com/dwwbx27ts/image/upload/v1739603746/Screenshot_2025-02-15_124523_zxjmts.png',
       bio: 'Expert in streamlining development operations and maintaining infrastructure.',
       social: {
