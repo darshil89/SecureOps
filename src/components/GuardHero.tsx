@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { Star } from 'lucide-react';
-import Maps from './Maps';
-import { useSession } from 'next-auth/react';
-import Image from 'next/image';
+import React from "react";
+import { Star } from "lucide-react";
+import Maps from "./Maps";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
 
 interface GuardHeroProps {
   guardData: {
@@ -20,25 +20,31 @@ interface GuardHeroProps {
 }
 
 const GuardHero: React.FC = () => {
-
-  const {data , status} = useSession();
+  const { data, status } = useSession();
   // Dummy Data
   const guardData = {
-    name:'Raju Chaurasia',
-    id: '1234',
-    shift: 'Night',
-    position: 'Security Guard',
-    checkInDate: '14 Feb',
-    checkInStatus: 'Yes',
+    name: "Raju Chaurasia",
+    id: "1234",
+    shift: "Night",
+    position: "Security Guard",
+    checkInDate: "14 Feb",
+    checkInStatus: "Yes",
     rating: 4.5,
     reviews: [
-      { text: 'Very responsible and punctual.', author: 'Alice', location: 'Flat 302' },
-      { text: 'Great service, very professional.', author: 'Bob', location: 'Block A' },
+      {
+        text: "Very responsible and punctual.",
+        author: "Alice",
+        location: "Flat 302",
+      },
+      {
+        text: "Great service, very professional.",
+        author: "Bob",
+        location: "Block A",
+      },
     ],
   };
 
   return (
-   
     <div className="flex flex-col items-center bg-gray-100 min-h-screen py-10">
       {/* Profile Section */}
       <div className="bg-white p-6 rounded-lg shadow-lg w-3/4 flex">
@@ -46,7 +52,7 @@ const GuardHero: React.FC = () => {
         <div className="w-1/3 flex flex-col items-center border-r border-gray-300 p-4">
           <div className="w-32 h-32 bg-gray-200 rounded-full mb-4 flex items-center justify-center">
             <Image
-              src={data?.user.image || '/guard.png'}
+              src={data?.user.image || "/guard.png"}
               alt="Guard"
               width={100}
               height={100}
@@ -56,19 +62,25 @@ const GuardHero: React.FC = () => {
           <p className="font-bold text-lg">{data?.user.name}</p>
           <p className="text-gray-600 font-semibold ">ID: {data?.user.id}</p>
           <p className="text-gray-600 font-semibold ">Shift: Night</p>
-          <p className="text-gray-600 font-semibold ">Position: {data?.user.role}</p>
+          <p className="text-gray-600 font-semibold ">
+            Position: {data?.user.role}
+          </p>
         </div>
 
         {/* Right Side - Check-in, Ratings, and Reviews */}
         <div className="w-2/3 p-6">
           <div className="mb-4">
             <label className="text-gray-700 font-semibold">Date:</label>
-            <p className="border p-2 rounded-md bg-gray-100">{guardData.checkInDate}</p>
+            <p className="border p-2 rounded-md bg-gray-100">
+              {guardData.checkInDate}
+            </p>
           </div>
 
           <div className="mb-4">
             <label className="text-gray-700 font-semibold">Checked In:</label>
-            <p className="border p-2 rounded-md bg-gray-100">{guardData.checkInStatus}</p>
+            <p className="border p-2 rounded-md bg-gray-100">
+              {guardData.checkInStatus}
+            </p>
           </div>
 
           <div className="mb-4">
@@ -77,7 +89,10 @@ const GuardHero: React.FC = () => {
               {[...Array(5)].map((_, i) => (
                 <Star
                   key={i}
-                  className={`w-6 h-6 ${i < Math.floor(guardData.rating) ? 'text-yellow-500' : 'text-gray-300'}`}
+                  className={`w-6 h-6 ${i < Math.floor(guardData.rating)
+                      ? "text-yellow-500"
+                      : "text-gray-300"
+                    }`}
                 />
               ))}
             </div>
@@ -98,16 +113,14 @@ const GuardHero: React.FC = () => {
             </div>
           </div>
         </div>
-        
       </div>
+      {/* Map Section */}
       <div className="w-screen px-40 mt-6 mx-10">
-        <div className="w-full h-64 border rounded-md shadow-md bg-gray-200 flex items-center justify-center">
+        <div className="w-full flex flex-col border rounded-md shadow-md bg-slate-50 items-center justify-center">
+          <h2 className="text-center text-lg font-semibold mb-4">Your Location</h2>
           <Maps />
         </div>
       </div>
-
-      {/* Map Section */}
-     
     </div>
   );
 };

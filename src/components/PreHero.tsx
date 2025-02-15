@@ -99,7 +99,7 @@ const PreHero: FC = () => {
                         One Dashboard. Total Control. Real-Time Security Management Made Simple.
                         </h4>
                         <button className="px-8 py-2 mt-10 rounded-md bg-teal-500 text-white font-bold transition duration-200 hover:bg-white hover:text-black border-2 border-transparent hover:border-teal-500">
-                            LFG
+                            Get Started
                         </button>
                     </div>
                 </div>
