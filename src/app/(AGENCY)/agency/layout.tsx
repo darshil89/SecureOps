@@ -40,7 +40,7 @@ export default async function RootLayout({
   const data = {
     link: [
       {
-        href: `${smallCase}/dashboard`,
+        href: `${smallCase}/guards/`,
       },
       {
         href: `${smallCase}/alerts`,

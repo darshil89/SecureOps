@@ -1,8 +1,8 @@
 "use client";
+import Link from "next/link";
 import Maps from "@/components/Maps";
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 
 const page = () => {
   const [guardData, setGuardData] = useState<
@@ -103,7 +103,10 @@ const page = () => {
                     className="border-t border-gray-100 hover:bg-gray-50 transition-colors"
                   >
                     <td className="px-6 py-4 text-sm text-gray-700 cursor-pointer">
-                      {guard.id}
+                      <Link href={`/agency/guards/info/${guard.id.toString()}`}>
+                        {" "}
+                        {guard.id}
+                      </Link>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-700 font-medium cursor-pointer">
                       {guard.name}
