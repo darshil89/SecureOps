@@ -1,10 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Star } from "lucide-react";
 import Maps from "./Maps";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { checkGeofence, getUserLocation } from "@/helpers/map";
+import { markAttendance } from "@/helpers/backendConnect";
+import { Attendance } from "@/types/guard";
 
 interface GuardHeroProps {
   guardData: {
@@ -21,14 +24,47 @@ interface GuardHeroProps {
 
 const GuardHero: React.FC = () => {
   const { data, status } = useSession();
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
+  const [attendance, setAttendance] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    // setIsSubmitted(true);
+
+    if (attendance == "absent") {
+      setIsSubmitted(true);
+      return
+    }
+
+    setIsLoading(true)
+    try {
+      const userLocation = await getUserLocation()
+
+      const isPresent = checkGeofence(userLocation)
+
+      const d: Attendance = {
+        checkIn: new Date().toLocaleDateString(),
+        checkOut: new Date().setHours(new Date().getHours() + 12).toLocaleString(),
+        location: "in position",
+        present: isPresent
+      }
+
+      console.log(d)
+
+      const response = markAttendance(d)
+
+    } catch (error) {
+      console.log("Error", error)
+    }
+    setIsLoading(false)
+  };
+
   // Dummy Data
   const guardData = {
-    name: "Raju Chaurasia",
-    id: "1234",
     shift: "Night",
-    position: "Security Guard",
-    checkInDate: "14 Feb",
-    checkInStatus: "Yes",
+    checkInDate: new Date().toLocaleDateString(),
+    checkInStatus: false,
     rating: 4.5,
     reviews: [
       {
@@ -69,19 +105,42 @@ const GuardHero: React.FC = () => {
 
         {/* Right Side - Check-in, Ratings, and Reviews */}
         <div className="w-2/3 p-6">
-          <div className="mb-4">
-            <label className="text-gray-700 font-semibold">Date:</label>
-            <p className="border p-2 rounded-md bg-gray-100">
-              {guardData.checkInDate}
-            </p>
-          </div>
+          <form action="submit" onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label className="text-gray-700 font-semibold">Date:</label>
+              <p className="border p-2 rounded-md bg-gray-100">
+                {guardData.checkInDate}
+              </p>
+            </div>
 
-          <div className="mb-4">
-            <label className="text-gray-700 font-semibold">Checked In:</label>
-            <p className="border p-2 rounded-md bg-gray-100">
-              {guardData.checkInStatus}
-            </p>
-          </div>
+            <div className="mb-4">
+              <label className="text-gray-700 font-semibold">Checked In:</label>
+              {/* // input the field (dropdown) to mark present or absent */}
+
+              <div className="mb-4 flex items-center gap-2">
+                <select
+                  id="attendance"
+                  value={attendance}
+                  onChange={(e) => setAttendance(e.target.value)}
+                  className="flex-1 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 text-gray-700 bg-white"
+                  required
+                >
+                  <option value="absent">❌ Absent</option>
+                  <option value="present">✅ Present</option>
+                </select>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitted}
+                  className={`px-4 py-2 rounded-lg font-semibold text-white transition ${isSubmitted ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+                    }`}
+                >
+                  {isLoading ? "Checking... " : "Submit"}
+                </button>
+              </div>
+
+            </div>
+          </form>
 
           <div className="mb-4">
             <label className="text-gray-700 font-semibold">Rating:</label>
@@ -90,8 +149,8 @@ const GuardHero: React.FC = () => {
                 <Star
                   key={i}
                   className={`w-6 h-6 ${i < Math.floor(guardData.rating)
-                      ? "text-yellow-500"
-                      : "text-gray-300"
+                    ? "text-yellow-500"
+                    : "text-gray-300"
                     }`}
                 />
               ))}
@@ -121,7 +180,7 @@ const GuardHero: React.FC = () => {
           <Maps />
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 
