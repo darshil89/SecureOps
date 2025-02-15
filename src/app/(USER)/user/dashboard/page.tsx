@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
+import Maps from "@/components/ChatMap";
 
 import { Bell, Building2, ArrowRight } from "lucide-react";
 
@@ -54,6 +55,12 @@ const User = () => {
           </Link>
         </div>
       </div>
+      <div className="mt-8">
+              <h2 className="text-2xl font-bold mb-4 text-gray-800">🛡️ Guards Nearby 🚶‍♂️</h2>
+              <div className="h-[400px] w-full rounded-xl shadow-lg overflow-hidden border border-gray-200">
+                <Maps />
+              </div>
+            </div>
     </div>
   );
 };

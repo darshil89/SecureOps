@@ -21,7 +21,12 @@ const centralZone = { lat: 22.7757952, lng: 86.1468294 };
 const ZONE_RADIUS = 1000; // 2 km
 
 // Helper function to calculate distance (Haversine formula)
-const getDistance = (lat1: number, lng1: number, lat2: number, lng2: number) => {
+const getDistance = (
+  lat1: number,
+  lng1: number,
+  lat2: number,
+  lng2: number
+) => {
   const R = 6371e3; // Earth radius in meters
   const toRad = (degree: number) => (degree * Math.PI) / 180;
 
@@ -30,7 +35,10 @@ const getDistance = (lat1: number, lng1: number, lat2: number, lng2: number) => 
 
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    Math.cos(toRad(lat1)) *
+      Math.cos(toRad(lat2)) *
+      Math.sin(dLng / 2) *
+      Math.sin(dLng / 2);
 
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
@@ -38,6 +46,10 @@ const getDistance = (lat1: number, lng1: number, lat2: number, lng2: number) => 
 };
 
 io.on("connection", (socket) => {
+  socket.on("sendMessage", ({ userId , guardId, message }) => {
+    console.log(`user id - ${userId} , guard id - ${guardId}: ${JSON.stringify(message, null, 2)}`);
+    io.emit(`${userId}-chat-${guardId}`, message);
+  });
   socket.on("updateLocation", ({ userId, lat, lng }) => {
     if (!userId) return;
 

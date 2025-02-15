@@ -1,0 +1,148 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import io from "socket.io-client";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+import { useSession } from "next-auth/react";
+import { TbCurrentLocation } from "react-icons/tb";
+
+// WebSocket Connection
+const socket = io("ws://localhost:5000", {
+  transports: ["websocket"],
+});
+
+// Custom Marker Icon
+const customIcon = new L.Icon({
+  iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+});
+
+// ChatBox Component
+const ChatBox = ({ guardId, userId }: { guardId: string, userId: string }) => {
+  const [messages, setMessages] = useState<{ sender: string; text: string }[]>(
+    []
+  );
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    socket.on(`chat-${guardId}`, (msg) => {
+      setMessages((prev) => [...prev, msg]);
+    });
+
+    return () => {
+      socket.off(`chat-${guardId}`);
+    };
+  }, [guardId]);
+
+  const sendMessage = () => {
+    if (!message.trim()) return;
+    const msg = { sender: "user", text: message };
+    socket.emit("sendMessage", { userId , guardId, message: msg });
+    setMessages((prev) => [...prev, msg]);
+    setMessage("");
+  };
+
+  return (
+    <div className="w-64 p-2 bg-white shadow-md border rounded-lg">
+      <div className="h-40 overflow-y-auto border-b p-2">
+        {messages.map((msg, index) => (
+          <div
+            key={index}
+            className={`p-1 my-1 rounded-md ${msg.sender === "user" ? "bg-blue-100 self-end" : "bg-gray-200"
+              }`}
+          >
+            {msg.text}
+          </div>
+        ))}
+      </div>
+      <div className="flex mt-2">
+        <input
+          type="text"
+          className="flex-1 p-1 border rounded"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Type a message..."
+        />
+        <button
+          onClick={sendMessage}
+          className="ml-2 bg-blue-500 text-white px-3 py-1 rounded"
+        >
+          Send
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// Main Map Component
+export default function LiveLocation() {
+  const { data, status } = useSession();
+  const userId = data?.user?.id;
+
+  const [location, setLocation] = useState<{ lat: number | null; lng: number | null }>({ lat: null, lng: null });
+  const [users, setUsers] = useState<{ [key: string]: { lat: number; lng: number } }>({});
+
+  useEffect(() => {
+    if (!userId) return;
+
+    if ("geolocation" in navigator) {
+      const watchId = navigator.geolocation.watchPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setLocation({ lat: latitude, lng: longitude });
+
+          socket.emit("updateLocation", { userId, lat: latitude, lng: longitude });
+        },
+        (error) => console.error("Error getting location:", error),
+        { enableHighAccuracy: true, maximumAge: 0 }
+      );
+
+      return () => navigator.geolocation.clearWatch(watchId);
+    } else {
+      console.log("Geolocation is not supported by this browser.");
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    socket.on("broadcastLocation", (data) => {
+      setUsers(data);
+    });
+
+    return () => {
+      socket.off("broadcastLocation");
+    };
+  }, []);
+
+  return (
+    <div className="w-full relative">
+      <MapContainer
+        center={location.lat !== null && location.lng !== null ? [location.lat, location.lng] : [20, 78]}
+        zoom={15}
+        style={{ height: "500px", width: "100%" }}
+        className="relative"
+      >
+        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+
+        {location.lat !== null && location.lng !== null && (
+          <Marker position={[location.lat, location.lng]} icon={customIcon}>
+            <Popup>You are here!</Popup>
+          </Marker>
+        )}
+
+        {Object.entries(users).map(([id, user]) => (
+          <Marker key={id} position={[user.lat, user.lng]} icon={customIcon}>
+            <Popup>
+              <strong>Guard ID: {id}</strong>
+              <ChatBox guardId={id} userId={data?.user.id || ''} />
+            </Popup>
+          </Marker>
+        ))}
+      </MapContainer>
+    </div>
+  );
+}
