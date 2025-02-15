@@ -42,10 +42,16 @@ export default async function RootLayout({
       {
         href: `${smallCase}/dashboard`,
       },
+      {
+        href: `${smallCase}/alerts`,
+      },
     ],
     value: [
       {
         value: "Agency's Dashboard",
+      },
+      {
+        value: "Alerts",
       },
     ],
   };
