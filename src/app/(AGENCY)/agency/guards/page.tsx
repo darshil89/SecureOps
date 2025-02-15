@@ -94,6 +94,7 @@ const page = () => {
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600">
                     Address
                   </th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600"></th>
                 </tr>
               </thead>
               <tbody>
@@ -125,6 +126,13 @@ const page = () => {
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-700 cursor-pointer">
                       {guard.address}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-700 cursor-pointer">
+                      <button className="px-2 py-1 text-sm text-white rounded-md bg-blue-500">
+                        <Link href={`/agency/guards/attendance/${guard.id}`}>
+                          Attendance
+                        </Link>
+                      </button>
                     </td>
                   </tr>
                 ))}
