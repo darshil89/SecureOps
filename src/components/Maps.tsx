@@ -85,7 +85,7 @@ export default function LiveLocation() {
 
   useEffect(() => {
     const handleBroadcast = (data: {
-      [key: string]: { lat: number; lng: number };
+      [key: string]: {lat: number; lng: number };
     }) => {
       setUsers(data);
     };
@@ -123,7 +123,7 @@ export default function LiveLocation() {
         {/* Display other users' locations */}
         {Object.entries(users).map(([id, user]) => (
           <Marker key={id} position={[user.lat, user.lng]} icon={customIcon}>
-            <Popup>Guard: {data?.user.name}</Popup>
+            <Popup>User: {id}</Popup>
           </Marker>
         ))}
       </MapContainer>

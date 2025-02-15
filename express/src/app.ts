@@ -23,6 +23,7 @@ io.on("connection", (socket) => {
   
       console.log(`User ${userId} connected.`);
       users[userId] = { lat, lng }; // Update user location
+      console.log(users);
       io.emit("broadcastLocation", users); // Broadcast updated locations
     });
   
