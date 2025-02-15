@@ -9,19 +9,6 @@ import { checkGeofence, getUserLocation } from "@/helpers/map";
 import { markAttendance } from "@/helpers/backendConnect";
 import { Attendance } from "@/types/guard";
 
-interface GuardHeroProps {
-  guardData: {
-    name: string;
-    id: string;
-    shift: string;
-    position: string;
-    checkInDate: string;
-    checkInStatus: string;
-    rating: number;
-    reviews: Array<{ text: string; author: string; location: string }>;
-  };
-}
-
 const GuardHero: React.FC = () => {
   const { data, status } = useSession();
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -39,20 +26,26 @@ const GuardHero: React.FC = () => {
 
     setIsLoading(true)
     try {
-      const userLocation = await getUserLocation()
+      // const userLocation = await getUserLocation()
+
+      const userLocation = { lat: 22.7757945, lng: 86.1468304 }
+
+      console.log(userLocation)
 
       const isPresent = checkGeofence(userLocation)
 
       const d: Attendance = {
         checkIn: new Date().toLocaleDateString(),
-        checkOut: new Date().setHours(new Date().getHours() + 12).toLocaleString(),
+        checkOut: new Date().toLocaleDateString(),
         location: "in position",
-        present: isPresent
+        present: attendance == 'absent' ? false : isPresent
       }
 
       console.log(d)
 
-      const response = markAttendance(d)
+      const response = await markAttendance(d)
+
+      console.log("response : ", response)
 
     } catch (error) {
       console.log("Error", error)
