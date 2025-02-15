@@ -43,10 +43,16 @@ export default async function RootLayout({
       {
         href: `${smallCase}/dashboard`,
       },
+      {
+        href: `${smallCase}/verification`,
+      },
     ],
     value: [
       {
         value: "Police's Dashboard",
+      },
+      {
+        value: "Verification",
       },
     ],
   }
