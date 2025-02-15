@@ -25,13 +25,13 @@ const AttendancePage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentTime, setCurrentTime] = useState("");
 
-  useEffect(() => {
-    setCurrentTime(format(new Date(), "HH:mm:ss"));
-    const interval = setInterval(() => {
-      setCurrentTime(format(new Date(), "HH:mm:ss"));
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
+  // useEffect(() => {
+  //   setCurrentTime(format(new Date(), "HH:mm:ss"));
+  //   const interval = setInterval(() => {
+  //     setCurrentTime(format(new Date(), "HH:mm:ss"));
+  //   }, 1000);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   useEffect(() => {
     const fetchAttendanceData = async () => {
@@ -59,6 +59,8 @@ const AttendancePage = () => {
   const handleCheckIn = async () => {
     setIsCheckedIn(true);
   };
+
+  console.log(attendanceHistory)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 p-4 md:p-8">
@@ -141,7 +143,7 @@ const AttendancePage = () => {
                     className="hover:bg-gray-50 transition-colors"
                   >
                     <td className="px-6 py-4 text-sm text-gray-900">
-                      {record.date}
+                      {record.checkIn}
                     </td>
                     <td className="px-6 py-4">
                       <span
@@ -151,7 +153,7 @@ const AttendancePage = () => {
                             : "bg-red-100 text-red-800"
                         } px-3 py-1 inline-flex items-center gap-1 text-xs font-medium rounded-full`}
                       >
-                        {record.status === "Present" ? (
+                        {record.present == true ? (
                           <CheckCircle2 className="w-3 h-3" />
                         ) : (
                           <AlertCircle className="w-3 h-3" />
@@ -160,7 +162,7 @@ const AttendancePage = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-500">
-                      {record.shift}
+                      Night
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-500">
                       {record.checkIn || "-"}

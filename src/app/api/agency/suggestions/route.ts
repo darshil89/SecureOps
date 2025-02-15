@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     };
 
     const response = await fetch(
-      "https://2dc9-34-125-110-148.ngrok-free.app/predict",
+      "https://9c21-35-204-176-18.ngrok-free.app/predict",
       {
         method: "POST",
         headers: {

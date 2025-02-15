@@ -45,6 +45,9 @@ export default async function RootLayout({
       {
         href: `${smallCase}/alerts`,
       },
+      {
+        href: `${smallCase}/guards/metrics`,
+      },
     ],
     value: [
       {
@@ -52,6 +55,9 @@ export default async function RootLayout({
       },
       {
         value: "Alerts",
+      },
+      {
+        value: "Metrics",
       },
     ],
   };
