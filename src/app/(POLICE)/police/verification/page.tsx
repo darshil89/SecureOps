@@ -40,7 +40,15 @@ export default function VerificationPage() {
         );
     };
 
-    console.log(guards);
+    const setVerification = async () => {
+        if (!selectedGuard) return;
+
+        const response = await axios.post(`/api/police/guard/${selectedGuard.id}`);
+        console.log(response.data);
+        setIsDialogOpen(false);
+    };
+
+    // console.log(guards);
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -116,13 +124,21 @@ export default function VerificationPage() {
                                     </div>
                                 </div>
                             )}
-                            <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                            <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse justify-between">
+                                
                                 <button
                                     type="button"
                                     className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
                                     onClick={() => setIsDialogOpen(false)}
                                 >
                                     Close
+                                </button>
+                                <button
+                                    type="button"
+                                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-green-400 font-semibold text-white hover:bg-green-500 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                                    onClick={() => setVerification()}
+                                >
+                                    Verify
                                 </button>
                             </div>
                         </div>
