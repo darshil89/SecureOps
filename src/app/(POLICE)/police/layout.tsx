@@ -46,6 +46,9 @@ export default async function RootLayout({
       {
         href: `${smallCase}/verification`,
       },
+      {
+        href: `${smallCase}/dashboard/incident`,
+      },
     ],
     value: [
       {
@@ -53,6 +56,9 @@ export default async function RootLayout({
       },
       {
         value: "Verification",
+      },
+      {
+        value: "Incident",
       },
     ],
   }
