@@ -40,12 +40,24 @@ export default async function RootLayout({
   const data = {
     link: [
       {
-        href: `dashboard`,
+        href: `${smallCase}/guards/`,
+      },
+      {
+        href: `${smallCase}/alerts`,
+      },
+      {
+        href: `${smallCase}/guards/metrics`,
       },
     ],
     value: [
       {
         value: "Agency's Dashboard",
+      },
+      {
+        value: "Alerts",
+      },
+      {
+        value: "Metrics",
       },
     ],
   };

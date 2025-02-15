@@ -22,14 +22,14 @@ const Navbar = ({ data }: { data: NavbarProps }) => {
 
   return (
     <>
-    <header className="py-4 bg-black sm:py-6" x-data="{expanded: false}">
+    <header className=" bg-black sm:py-6" x-data="{expanded: false}">
         <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             <div className="shrink-0">
               <Link href="/" className="flex">
                 <Image
-                  width={100}
-                  height={100}
+                  width={50}
+                  height={50}
                   src="/assets/logo.png"
                   alt="logo"
                 />

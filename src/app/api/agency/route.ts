@@ -8,7 +8,7 @@ export async function GET() {
   const email = sessions?.user.email;
 
   const agency = await prisma.agency.findFirst({
-    where: { email },
+    where: { email: email },
     include: { users: true },
   });
 
@@ -18,5 +18,6 @@ export async function GET() {
       status: 500,
     });
   }
+  console.log(agency.users);
   return NextResponse.json(agency.users);
 }
