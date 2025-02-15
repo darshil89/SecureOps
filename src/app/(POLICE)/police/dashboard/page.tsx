@@ -1,27 +1,33 @@
+
+"use client";
 import React from 'react'
 import Logout from "../../../../components/auth/Logout"
+
 
 const Police = () => {
   const [incidents, setIncidents] = React.useState([
     {
-      from: "John Doe",
+      from: "john.doe@email.com",
       subject: "Theft Report",
       status: "Pending",
-      received: "2024-01-15"
+      received: "2024-01-15",
+      time: "09:30:00"
     },
     {
-      from: "Jane Smith",
+      from: "jane.smith@email.com",
       subject: "Vandalism",
       status: "Resolved",
-      received: "2024-01-14"
+      received: "2024-01-14",
+      time: "14:15:00"
     },
     {
-      from: "Mike Johnson",
+      from: "mike.johnson@email.com",
       subject: "Traffic Incident",
       status: "Pending",
-      received: "2024-01-13"
+      received: "2024-01-13",
+      time: "16:45:00"
     }
-  ]);
+    ]);
 
   React.useEffect(() => {
     const fetchIncidents = async () => {
@@ -41,11 +47,8 @@ const Police = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Header */}
-      <div className="bg-white shadow-sm p-4 flex justify-between items-center">
-      <h1 className="text-2xl font-semibold text-gray-800">Police Dashboard</h1>
-      <Logout />
-      </div>
+      
+      
 
       {/* Main Content */}
       <div className="container mx-auto p-6">
@@ -61,8 +64,8 @@ const Police = () => {
           <tr className="bg-gray-50">
           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">From</th>
           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject</th>
-          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Received</th>
+          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
@@ -70,16 +73,9 @@ const Police = () => {
           <tr key={index} className="hover:bg-gray-50 cursor-pointer">
             <td className="px-6 py-4 whitespace-nowrap">{incident.from}</td>
             <td className="px-6 py-4">{incident.subject}</td>
-            <td className="px-6 py-4">
-            <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-              incident.status === 'Pending' 
-              ? 'bg-yellow-100 text-yellow-800'
-              : 'bg-green-100 text-green-800'
-            }`}>
-              {incident.status}
-            </span>
-            </td>
+            
             <td className="px-6 py-4 text-sm text-gray-500">{incident.received}</td>
+            <td className="px-6 py-4 text-sm text-gray-500">{incident.time}</td>
           </tr>
           ))}
         </tbody>
