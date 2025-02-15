@@ -2,11 +2,10 @@
 
 import { useEffect, useState } from "react";
 import io from "socket.io-client";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { useSession } from "next-auth/react";
-import { TbCurrentLocation } from "react-icons/tb";
 
 // WebSocket Connection
 const socket = io("ws://localhost:5000", {
@@ -23,26 +22,26 @@ const customIcon = new L.Icon({
 });
 
 // ChatBox Component
-const ChatBox = ({ guardId, userId }: { guardId: string, userId: string }) => {
-  const [messages, setMessages] = useState<{ sender: string; text: string }[]>(
-    []
-  );
+const ChatBox = ({ guardId, userId }: { guardId: string; userId: string }) => {
+  const [messages, setMessages] = useState<{ sender: string; text: string }[]>([]);
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    socket.on(`chat-${guardId}`, (msg) => {
+    socket.on(`${userId}-chat-${guardId}`, (msg) => {
+      console.log("Received message:", msg);
       setMessages((prev) => [...prev, msg]);
     });
 
     return () => {
-      socket.off(`chat-${guardId}`);
+      socket.off(`chat-${userId}-${guardId}`);
     };
-  }, [guardId]);
+  }, [userId]);
 
   const sendMessage = () => {
     if (!message.trim()) return;
-    const msg = { sender: "user", text: message };
-    socket.emit("sendMessage", { userId , guardId, message: msg });
+
+    const msg = { sender: "guard", text: message };
+    socket.emit("sendMessage", { userId, guardId, message: msg });
     setMessages((prev) => [...prev, msg]);
     setMessage("");
   };
@@ -81,10 +80,13 @@ const ChatBox = ({ guardId, userId }: { guardId: string, userId: string }) => {
 
 // Main Map Component
 export default function LiveLocation() {
-  const { data, status } = useSession();
+  const { data } = useSession();
   const userId = data?.user?.id;
 
-  const [location, setLocation] = useState<{ lat: number | null; lng: number | null }>({ lat: null, lng: null });
+  const [location, setLocation] = useState<{ lat: number | null; lng: number | null }>({
+    lat: null,
+    lng: null,
+  });
   const [users, setUsers] = useState<{ [key: string]: { lat: number; lng: number } }>({});
 
   useEffect(() => {
@@ -136,10 +138,15 @@ export default function LiveLocation() {
 
         {Object.entries(users).map(([id, user]) => (
           <Marker key={id} position={[user.lat, user.lng]} icon={customIcon}>
-            <Popup>
-              <strong>Guard ID: {id}</strong>
-              <ChatBox guardId={id} userId={data?.user.id || ''} />
-            </Popup>
+            {id === userId ? (
+              <Popup>You are here!</Popup>
+            ) : (
+              <Popup>
+                <strong>Guard ID: {id}</strong>
+                <ChatBox guardId={id} userId={userId || ""} />
+              </Popup>
+            )}
+
           </Marker>
         ))}
       </MapContainer>

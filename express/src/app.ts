@@ -48,7 +48,9 @@ const getDistance = (
 io.on("connection", (socket) => {
   socket.on("sendMessage", ({ userId , guardId, message }) => {
     console.log(`user id - ${userId} , guard id - ${guardId}: ${JSON.stringify(message, null, 2)}`);
+    // Emit message to the user and guard
     io.emit(`${userId}-chat-${guardId}`, message);
+    io.emit(`${guardId}-chat`, { sender: "user", text: message.text, userId });
   });
   socket.on("updateLocation", ({ userId, lat, lng }) => {
     if (!userId) return;

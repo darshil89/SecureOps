@@ -49,6 +49,9 @@ export default async function RootLayout({
       },
       {
         href: `${smallCase}/alerts`,
+      },
+      {
+        href: `${smallCase}/chats`,
 
       }
     ],
@@ -61,6 +64,9 @@ export default async function RootLayout({
       },
       {
         value: "Alerts",
+      },
+      {
+        value: "Chats",
       }
     ],
   }
