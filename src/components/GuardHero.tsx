@@ -9,23 +9,10 @@ import { checkGeofence, getUserLocation } from "@/helpers/map";
 import { markAttendance } from "@/helpers/backendConnect";
 import { Attendance } from "@/types/guard";
 
-interface GuardHeroProps {
-  guardData: {
-    name: string;
-    id: string;
-    shift: string;
-    position: string;
-    checkInDate: string;
-    checkInStatus: string;
-    rating: number;
-    reviews: Array<{ text: string; author: string; location: string }>;
-  };
-}
-
 const GuardHero: React.FC = () => {
   const { data, status } = useSession();
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const [attendance, setAttendance] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -34,30 +21,35 @@ const GuardHero: React.FC = () => {
 
     if (attendance == "absent") {
       setIsSubmitted(true);
-      return
+      return;
     }
 
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const userLocation = await getUserLocation()
+      // const userLocation = await getUserLocation()
 
-      const isPresent = checkGeofence(userLocation)
+      const userLocation = { lat: 22.7757945, lng: 86.1468304 };
+
+      console.log(userLocation);
+
+      const isPresent = checkGeofence(userLocation);
 
       const d: Attendance = {
         checkIn: new Date().toLocaleDateString(),
-        checkOut: new Date().setHours(new Date().getHours() + 12).toLocaleString(),
+        checkOut: new Date().toLocaleDateString(),
         location: "in position",
-        present: isPresent
-      }
+        present: attendance == "absent" ? false : isPresent,
+      };
 
-      console.log(d)
+      console.log(d);
 
-      const response = markAttendance(d)
+      const response = await markAttendance(d);
 
+      console.log("response : ", response);
     } catch (error) {
-      console.log("Error", error)
+      console.log("Error", error);
     }
-    setIsLoading(false)
+    setIsLoading(false);
   };
 
   // Dummy Data
@@ -132,13 +124,15 @@ const GuardHero: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isSubmitted}
-                  className={`px-4 py-2 rounded-lg font-semibold text-white transition ${isSubmitted ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
-                    }`}
+                  className={`px-4 py-2 rounded-lg font-semibold text-white transition ${
+                    isSubmitted
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-blue-600 hover:bg-blue-700"
+                  }`}
                 >
                   {isLoading ? "Checking... " : "Submit"}
                 </button>
               </div>
-
             </div>
           </form>
 
@@ -148,10 +142,11 @@ const GuardHero: React.FC = () => {
               {[...Array(5)].map((_, i) => (
                 <Star
                   key={i}
-                  className={`w-6 h-6 ${i < Math.floor(guardData.rating)
-                    ? "text-yellow-500"
-                    : "text-gray-300"
-                    }`}
+                  className={`w-6 h-6 ${
+                    i < Math.floor(guardData.rating)
+                      ? "text-yellow-500"
+                      : "text-gray-300"
+                  }`}
                 />
               ))}
             </div>
@@ -176,11 +171,13 @@ const GuardHero: React.FC = () => {
       {/* Map Section */}
       <div className="w-screen px-40 mt-6 mx-10">
         <div className="w-full flex flex-col border rounded-md shadow-md bg-slate-50 items-center justify-center">
-          <h2 className="text-center text-lg font-semibold mb-4">Your Location</h2>
+          <h2 className="text-center text-lg font-semibold mb-4">
+            Your Location
+          </h2>
           <Maps />
         </div>
       </div>
-    </div >
+    </div>
   );
 };
 

@@ -1,12 +1,12 @@
-const geofence = {
-  center: { lat: 22.780000, lng: 86.150000 },
-  radius: 500,
-};
-
 // const geofence = {
-//   center: { lat: 22.7765, lng: 86.1475 },
+//   center: { lat: 22.780000, lng: 86.150000 },
 //   radius: 500,
 // };
+
+const geofence = {
+  center: { lat: 22.7765, lng: 86.1475 },
+  radius: 500,
+};
 
 
 export const getDistance = (

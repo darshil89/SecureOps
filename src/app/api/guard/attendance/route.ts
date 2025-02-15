@@ -3,6 +3,7 @@ import { prisma } from "../../../../../prisma/index";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/libs/auth";
 import { Gender } from "@prisma/client";
+import { ObjectId } from "mongodb";
 
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
@@ -13,19 +14,27 @@ export async function POST(req: NextRequest, res: NextResponse) {
       });
     }
 
-    const body = (await req.json())
+    const body = await req.json();
 
-    console.log(body)
+    console.log(body);
 
-    // const user = await prisma.attendance.create({
-    //     checkIn : body.checkIn
-    // })
+    const attendance = await prisma.attendance.create({
+      data: {
+        checkIn: body.checkIn,
+        checkOut: body.checkOut || null,
+        location: body.location,
+        present: body.present,
+        userId: session.user.id,
+      },
+    });
     return NextResponse.json({
+      status: 200,
       message: "Attendance Marked",
     });
   } catch (error) {
     return NextResponse.json({
-      error: "Something went wrong in updating the user",
+      status: 400,
+      error: error,
     });
   }
 }
