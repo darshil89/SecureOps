@@ -46,6 +46,10 @@ export default async function RootLayout({
       {
         href: `${smallCase}/register`,
 
+      },
+      {
+        href: `${smallCase}/alerts`,
+
       }
     ],
     value: [
@@ -54,6 +58,9 @@ export default async function RootLayout({
 
       }, {
         value: "Register",
+      },
+      {
+        value: "Alerts",
       }
     ],
   }
