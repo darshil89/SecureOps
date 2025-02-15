@@ -8,12 +8,13 @@ import L from "leaflet";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import { useSession } from "next-auth/react";
+import { TbCurrentLocation } from "react-icons/tb";
 
 const socket = io("ws://localhost:5000", {
   transports: ["websocket"],
 });
 
-// Custom Marker Icon (Fixes Missing Marker Issue)
+// Custom Marker Icon
 const customIcon = new L.Icon({
   iconUrl: markerIcon.src,
   shadowUrl: markerShadow.src,
@@ -39,6 +40,30 @@ const MapAutoCenter = ({
   }, [location, map]);
 
   return null;
+};
+
+// Recenter Button Component
+const RecenterButton = ({
+  location,
+}: {
+  location: { lat: number | null; lng: number | null };
+}) => {
+  const map = useMap();
+
+  const recenterMap = () => {
+    if (location.lat !== null && location.lng !== null) {
+      map.setView([location.lat, location.lng], 15, { animate: true });
+    }
+  };
+
+  return (
+    <button
+      onClick={recenterMap}
+      className="absolute bottom-4 left-4 z-[1000] bg-white p-2 rounded-full shadow-md hover:bg-gray-200"
+    >
+      <TbCurrentLocation size={24} />
+    </button>
+  );
 };
 
 export default function LiveLocation() {
@@ -85,7 +110,7 @@ export default function LiveLocation() {
 
   useEffect(() => {
     const handleBroadcast = (data: {
-      [key: string]: {lat: number; lng: number };
+      [key: string]: { lat: number; lng: number };
     }) => {
       setUsers(data);
     };
@@ -98,7 +123,8 @@ export default function LiveLocation() {
   }, []);
 
   return (
-    <div className="w-full">
+    <div className="w-full relative">
+      {/* Map */}
       <MapContainer
         center={
           location.lat !== null && location.lng !== null
@@ -107,11 +133,15 @@ export default function LiveLocation() {
         }
         zoom={15}
         style={{ height: "500px", width: "100%" }}
+        className="relative"
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
         {/* Auto-center map when location updates */}
         <MapAutoCenter location={location} />
+
+        {/* Recenter Button inside Map */}
+        <RecenterButton location={location} />
 
         {/* Display user's own location */}
         {location.lat !== null && location.lng !== null && (

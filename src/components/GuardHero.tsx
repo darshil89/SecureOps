@@ -1,19 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Star } from "lucide-react";
 import Maps from "./Maps";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { checkGeofence, getUserLocation } from "@/helpers/map";
-import { markAttendance } from "@/helpers/backendConnect";
-import { Attendance } from "@/types/guard";
+import { getAttendance, markAttendance } from "@/helpers/backendConnect";
+import { Attendance } from "@prisma/client";
+import { AttendanceProps } from "@/types/guard";
 
 const GuardHero: React.FC = () => {
   const { data, status } = useSession();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false)
   const [attendance, setAttendance] = useState("");
+  const [fetchAttendance, setFetchAttendance] = useState<Attendance>()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,7 +36,7 @@ const GuardHero: React.FC = () => {
 
       const isPresent = checkGeofence(userLocation)
 
-      const d: Attendance = {
+      const d: AttendanceProps = {
         checkIn: new Date().toLocaleDateString(),
         checkOut: new Date().toLocaleDateString(),
         location: "in position",
@@ -45,7 +47,12 @@ const GuardHero: React.FC = () => {
 
       const response = await markAttendance(d)
 
-      console.log("response : ", response)
+      console.log(response.data)
+
+      alert("Attendance Marked")
+
+      const r = await getAttendance()
+      setFetchAttendance(r.data);
 
     } catch (error) {
       console.log("Error", error)
@@ -72,6 +79,16 @@ const GuardHero: React.FC = () => {
       },
     ],
   };
+
+  useEffect(() => {
+    const fetchAttendance = async () => {
+      const response = await getAttendance()
+      setFetchAttendance(response.data);
+    };
+    fetchAttendance();
+  }, [])
+
+  console.log(fetchAttendance)
 
   return (
     <div className="flex flex-col items-center bg-gray-100 min-h-screen py-10">
@@ -106,33 +123,60 @@ const GuardHero: React.FC = () => {
               </p>
             </div>
 
-            <div className="mb-4">
-              <label className="text-gray-700 font-semibold">Checked In:</label>
-              {/* // input the field (dropdown) to mark present or absent */}
+            {fetchAttendance && (<>
+              <div className="mb-4">
+                <label className="text-gray-700 font-semibold">Checked In:</label>
+                {/* // input the field (dropdown) to mark present or absent */}
 
-              <div className="mb-4 flex items-center gap-2">
-                <select
-                  id="attendance"
-                  value={attendance}
-                  onChange={(e) => setAttendance(e.target.value)}
-                  className="flex-1 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 text-gray-700 bg-white"
-                  required
-                >
-                  <option value="absent">❌ Absent</option>
-                  <option value="present">✅ Present</option>
-                </select>
+                <div className="mb-4 flex items-center gap-2">
+                  <p className="flex-1 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 text-gray-700 bg-white">
+                    {fetchAttendance.present ? "✅ Present" : "❌ Absent"}
+                  </p>
 
-                <button
-                  type="submit"
-                  disabled={isSubmitted}
-                  className={`px-4 py-2 rounded-lg font-semibold text-white transition ${isSubmitted ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
-                    }`}
-                >
-                  {isLoading ? "Checking... " : "Submit"}
-                </button>
+                  <button
+                    type="submit"
+                    disabled={isSubmitted}
+                    className={`px-4 py-2 rounded-lg font-semibold text-white transition ${isSubmitted ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+                      }`}
+                  >
+                    Submitted
+                  </button>
+                </div>
+
               </div>
 
-            </div>
+
+            </>)}
+
+            {!fetchAttendance && (<>
+              <div className="mb-4">
+                <label className="text-gray-700 font-semibold">Checked In:</label>
+                {/* // input the field (dropdown) to mark present or absent */}
+
+                <div className="mb-4 flex items-center gap-2">
+                  <select
+                    id="attendance"
+                    value={attendance}
+                    onChange={(e) => setAttendance(e.target.value)}
+                    className="flex-1 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 text-gray-700 bg-white"
+                    required
+                  >
+                    <option value="absent">❌ Absent</option>
+                    <option value="present">✅ Present</option>
+                  </select>
+
+                  <button
+                    type="submit"
+                    disabled={isSubmitted}
+                    className={`px-4 py-2 rounded-lg font-semibold text-white transition ${isSubmitted ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+                      }`}
+                  >
+                    {isLoading ? "Checking... " : "Submit"}
+                  </button>
+                </div>
+
+              </div>
+            </>)}
           </form>
 
           <div className="mb-4">

@@ -1,4 +1,4 @@
-export type Attendance = {
+export type AttendanceProps = {
   checkIn: string;
   checkOut: string;
   location: string;
