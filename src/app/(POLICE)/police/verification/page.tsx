@@ -44,85 +44,100 @@ export default function VerificationPage() {
 
     useEffect(() => {
         // Simulate API call
-        const dummyData: Guard[] = [
-            {
-                id: '1',
-                name: 'Rajesh Kumar',
-                email: 'rajesh.kumar@example.com',
-                age: 32,
-                gender: 'Male',
-                phone: '9876543210',
-                address: '123, MG Road, Bangalore',
-                status: 'verified',
-                photo: 'https://example.com/photo1.jpg',
-                documents: [
-                    { type: 'Aadhaar Card', url: 'https://example.com/aadhaar1.pdf' },
-                    { type: 'Police Verification', url: 'https://example.com/police1.pdf' }
-                ]
-            },
-            {
-                id: '2',
-                name: 'Priya Sharma',
-                email: 'priya.s@example.com',
-                age: 28,
-                gender: 'Female',
-                phone: '8765432109',
-                address: '45, Sector 18, Noida',
-                status: 'pending',
-                photo: 'https://example.com/photo2.jpg',
-                documents: [
-                    { type: 'PAN Card', url: 'https://example.com/pan2.pdf' },
-                    { type: 'Police Verification', url: 'https://example.com/police2.pdf' }
-                ]
-            },
-            {
-                id: '3',
-                name: 'Suresh Patel',
-                email: 'suresh.p@example.com',
-                age: 35,
-                gender: 'Male',
-                phone: '7654321098',
-                address: '78, Gandhi Nagar, Ahmedabad',
-                status: 'rejected',
-                photo: 'https://example.com/photo3.jpg',
-                documents: [
-                    { type: 'Aadhaar Card', url: 'https://example.com/aadhaar3.pdf' },
-                    { type: 'Police Verification', url: 'https://example.com/police3.pdf' }
-                ]
-            },
-            {
-                id: '4',
-                name: 'Anjali Verma',
-                email: 'anjali.v@example.com',
-                age: 30,
-                gender: 'Female',
-                phone: '6543210987',
-                address: '234, Anna Nagar, Chennai',
-                status: 'pending',
-                photo: 'https://example.com/photo4.jpg',
-                documents: [
-                    { type: 'Voter ID', url: 'https://example.com/voter4.pdf' },
-                    { type: 'Police Verification', url: 'https://example.com/police4.pdf' }
-                ]
-            },
-            {
-                id: '5',
-                name: 'Mohammed Khan',
-                email: 'mohammed.k@example.com',
-                age: 33,
-                gender: 'Male',
-                phone: '9876543210',
-                address: '56, Bandra West, Mumbai',
-                status: 'verified',
-                photo: 'https://example.com/photo5.jpg',
-                documents: [
-                    { type: 'Aadhaar Card', url: 'https://example.com/aadhaar5.pdf' },
-                    { type: 'Police Verification', url: 'https://example.com/police5.pdf' }
-                ]
-            }
-        ];
+        const fetchGuards = async () => {
+            const dummyData: Guard[] = [
+                {
+                    id: '1',
+                    name: 'Rajesh Kumar',
+                    email: 'rajesh.kumar@example.com',
+                    age: 32,
+                    gender: 'Male',
+                    phone: '9876543210',
+                    address: '123, MG Road, Bangalore',
+                    status: 'verified',
+                    photo: 'https://example.com/photo1.jpg',
+                    documents: [
+                        { type: 'Aadhaar Card', url: 'https://example.com/aadhaar1.pdf' },
+                        { type: 'Police Verification', url: 'https://example.com/police1.pdf' }
+                    ]
+                },
+                {
+                    id: '2',
+                    name: 'Priya Sharma',
+                    email: 'priya.s@example.com',
+                    age: 28,
+                    gender: 'Female',
+                    phone: '8765432109',
+                    address: '45, Sector 18, Noida',
+                    status: 'pending',
+                    photo: 'https://example.com/photo2.jpg',
+                    documents: [
+                        { type: 'PAN Card', url: 'https://example.com/pan2.pdf' },
+                        { type: 'Police Verification', url: 'https://example.com/police2.pdf' }
+                    ]
+                },
+                {
+                    id: '3',
+                    name: 'Suresh Patel',
+                    email: 'suresh.p@example.com',
+                    age: 35,
+                    gender: 'Male',
+                    phone: '7654321098',
+                    address: '78, Gandhi Nagar, Ahmedabad',
+                    status: 'rejected',
+                    photo: 'https://example.com/photo3.jpg',
+                    documents: [
+                        { type: 'Aadhaar Card', url: 'https://example.com/aadhaar3.pdf' },
+                        { type: 'Police Verification', url: 'https://example.com/police3.pdf' }
+                    ]
+                },
+                {
+                    id: '4',
+                    name: 'Anjali Verma',
+                    email: 'anjali.v@example.com',
+                    age: 30,
+                    gender: 'Female',
+                    phone: '6543210987',
+                    address: '234, Anna Nagar, Chennai',
+                    status: 'pending',
+                    photo: 'https://example.com/photo4.jpg',
+                    documents: [
+                        { type: 'Voter ID', url: 'https://example.com/voter4.pdf' },
+                        { type: 'Police Verification', url: 'https://example.com/police4.pdf' }
+                    ]
+                },
+                {
+                    id: '5',
+                    name: 'Mohammed Khan',
+                    email: 'mohammed.k@example.com',
+                    age: 33,
+                    gender: 'Male',
+                    phone: '9876543210',
+                    address: '56, Bandra West, Mumbai',
+                    status: 'verified',
+                    photo: 'https://example.com/photo5.jpg',
+                    documents: [
+                        { type: 'Aadhaar Card', url: 'https://example.com/aadhaar5.pdf' },
+                        { type: 'Police Verification', url: 'https://example.com/police5.pdf' }
+                    ]
+                }
+            ];
 
-        setGuards(dummyData);   }, []);
+            try {
+                const response = await fetch('/api/guards');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch guards');
+                }
+                const data = await response.json();
+                setGuards(data);
+            } catch (error) {
+                console.error('Error fetching guards:', error);
+                setGuards(dummyData);
+            }
+        };
+
+        fetchGuards();
+    }, []);
 
     const getStatusBadge = (status: Guard['status']) => {
         const colors = {
