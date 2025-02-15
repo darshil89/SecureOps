@@ -2,11 +2,11 @@ import React from "react";
 
 const page = () => {
   const alertData = {
-    location: "MG Road, Bengaluru, Karnataka, India",
+    location: "Kadma sonari link road",
     time: "February 15, 2025 | 02:45 AM IST",
     status: "Active",
     suspectDescription: "Male, approximately 5'9, wearing a black hoodie and jeans.",
-    alertMessage: "Unauthorized access detected at XYZ Bank ATM.",
+    alertMessage: "Unauthorized access detected at SBI Bank ATM.",
     incidentID: "BRCH-9578-2025",
   };
 
