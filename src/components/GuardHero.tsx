@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Star } from "lucide-react";
-import Maps from "./Maps";
+import Maps from "./IndidualMap";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { checkGeofence, getUserLocation } from "@/helpers/map";
