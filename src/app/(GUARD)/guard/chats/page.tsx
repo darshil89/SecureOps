@@ -34,7 +34,7 @@ export default function GuardChat() {
 
     useEffect(() => {
         if (chatContainerRef.current) {
-            chatContainerRef.current.scrollLeft = chatContainerRef.current.scrollWidth;
+            chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
         }
     }, [messages]);
 
@@ -51,16 +51,15 @@ export default function GuardChat() {
         <div className="flex flex-col w-full max-w-4xl mx-auto p-4 bg-gray-100">
             <h2 className="text-lg font-bold text-center mb-2">Security Guard Chat</h2>
 
-            {/* Chat container (HORIZONTAL SCROLL) */}
+            {/* Chat container (VERTICAL SCROLL) */}
             <div
                 ref={chatContainerRef}
-                className="flex overflow-x-auto whitespace-nowrap border bg-white rounded-md shadow p-2"
-                style={{ height: "200px", maxWidth: "100%" }}
+                className="flex flex-col overflow-y-auto border bg-white rounded-md shadow p-2 h-60"
             >
                 {messages.map((msg, index) => (
                     <div
                         key={index}
-                        className={`p-2 m-2 rounded-lg w-fit max-w-sm ${msg.sender === "guard"
+                        className={`p-2 my-1 rounded-lg w-fit max-w-sm ${msg.sender === "guard"
                                 ? "bg-blue-500 text-white self-end"
                                 : "bg-gray-300 text-black"
                             }`}
