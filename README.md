@@ -21,7 +21,7 @@ Urban security management faces challenges in **transparency, coordination, and 
 - **Geo-Fencing for Duty Areas** – Alerts if a guard moves out of an assigned zone.
 - **Live Surveillance Dashboard** – Centralized admin panel for real-time alerts and tracking.
 - **Private Guard Chat** – Chat with the guards anywhere in the zone anonymously and securely
-- 
+
 ---
 
 ## 🏗️ Tech Stack
@@ -48,16 +48,9 @@ Urban security management faces challenges in **transparency, coordination, and 
 - MongoDB
 - Python 3.8+
 
-### **Backend Setup**
-```sh
-cd backend
-npm install
-npm start
-```
-
 ### **Frontend Setup**
 ```sh
-cd frontend
+cd SecureOps
 npm install
 npm run dev
 ```
