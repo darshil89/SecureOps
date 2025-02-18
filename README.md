@@ -48,7 +48,7 @@ Urban security management faces challenges in **transparency, coordination, and 
 - MongoDB
 - Python 3.8+
 
-### **Frontend Setup**
+### **Setup**
 ```sh
 cd SecureOps
 npm install
