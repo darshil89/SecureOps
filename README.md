@@ -1,6 +1,6 @@
-### SecureOps - Smart Security Operations Management  
+# SecureOps - Smart Security Operations Management  
 
-#### 📌 Overview
+## 📌 Overview
 Urban security management faces challenges in **transparency, coordination, and real-time oversight**. SecureOps is a **full-stack web application** that integrates **security guard tracking, duty history management, and incident reporting** to optimize security deployment and oversight.
 
 ---
